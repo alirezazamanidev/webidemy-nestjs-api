@@ -10,5 +10,5 @@ export class AuthController {
 
     @HttpCode(HttpStatus.CREATED)
     @Post('/local/signUp')
-    RegisterUser(@Body())
+    RegisterUser(@Body() )
 }
