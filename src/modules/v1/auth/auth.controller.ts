@@ -1,6 +1,15 @@
-import { Body, Controller, HttpCode, HttpStatus, Post } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  HttpCode,
+  HttpStatus,
+  Post,
+  Request,
+} from '@nestjs/common';
 import { LoginDTO, RegisterDTO } from './dtos/auth.dto';
 import { AuthService } from './auth.service';
+import { Auth } from 'src/common/decorators/Auth.decorator';
 @Controller({
   path: 'auth',
   version: '1',
@@ -30,5 +39,11 @@ export class AuthController {
       message: 'the user successfully loggined!',
       webidemy_user_token: token,
     };
+  }
+  @HttpCode(HttpStatus.OK)
+  @Auth()
+  @Get('/profile')
+  ProfileUser(@Request() req) {
+    return req?.user;
   }
 }
