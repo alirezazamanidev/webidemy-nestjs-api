@@ -11,13 +11,13 @@ export class JWTStrategy extends PassportStrategy(Strategy) {
         (request: Request) => {
           let token = null;
           if (request && request.cookies) {
-            token = request.cookies['webidemy_user_token'];
+            token = request.cookies['webidemy_token'];
           }
           return token;
         },
       ]),
       ignoreExpiration: false,
-      secretOrKey: process.env.ACCESS_TOKEN_SECRET_KEY,
+      secretOrKey: process.env.JWT_KEY,
     });
   }
 
