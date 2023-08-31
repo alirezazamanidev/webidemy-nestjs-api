@@ -1,13 +1,6 @@
 import { NodeEnviorment } from 'src/common/enums/global.enum';
 export function getMongoURL() {
-  const {
-    NODE_ENV,
-    MONGO_DATABSE,
-    MONGO_HOST,
-    MONGO_PASSWORD,
-    MONGO_PORT,
-    MONGO_USERNAME,
-  } = process.env;
+  const { NODE_ENV, MONGO_DATABSE, MONGO_HOST, MONGO_PORT } = process.env;
 
   const connection =
     NODE_ENV == NodeEnviorment.DEV
