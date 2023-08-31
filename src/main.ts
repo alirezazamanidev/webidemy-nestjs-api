@@ -12,7 +12,6 @@ async function bootstrap() {
   });
   app.useGlobalFilters(...getGlobalFilters(httpAdapter));
 
-
   app.setGlobalPrefix('/api');
   await app.listen(process.env.PORT);
 }

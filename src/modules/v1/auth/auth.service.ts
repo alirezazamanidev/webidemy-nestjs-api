@@ -1,9 +1,10 @@
-import { Injectable } from '@nestjs/common';
-import { RegisterDTO } from './dtos/auth.dto';
+import { BadRequestException, Injectable } from '@nestjs/common';
+import { LoginDTO, RegisterDTO } from './dtos/auth.dto';
 import { UserService } from '../user/user.service';
 import { User } from 'src/common/interfaces/user.interface';
 import { JwtService } from '@nestjs/jwt';
 import { JWTpayload } from './types/JwtPayload.type';
+import { Messages } from 'src/common/enums/message.enum';
 
 @Injectable()
 export class AuthService {
@@ -13,6 +14,13 @@ export class AuthService {
   ) {}
   async SignUp(userDTO: RegisterDTO) {
     const user = await this.userService.create(userDTO);
+    const token = await this.createToken(user);
+    return token;
+  }
+
+  async SignIn(userDTO: LoginDTO) {
+    const user = await this.userService.findOneByPhone(userDTO?.phone);
+    if (!user) throw new BadRequestException(Messages.PHONE_NOT_EXIST);
     const token = await this.createToken(user);
     return token;
   }

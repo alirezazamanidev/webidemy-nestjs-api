@@ -6,7 +6,7 @@ import {
   HttpStatus,
   InternalServerErrorException,
 } from '@nestjs/common';
-import {  Response } from 'express';
+import { Response } from 'express';
 import { ErrorResponse, ErrorType } from 'src/common/types/public';
 import ValidationException from './validation.exception';
 
@@ -21,7 +21,7 @@ export default class ValidationFilter implements ExceptionFilter {
     if (exception instanceof HttpException) {
       statusCode = exception.getStatus();
       errorMessage = exception.message;
-      
+
       const errors = [];
       exception.validationErrors.forEach((err) => {
         const keys = Object.keys(err);

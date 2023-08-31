@@ -29,4 +29,7 @@ export class UserService {
       throw new InternalServerErrorException(err.message);
     }
   }
+  async findOneByPhone(phone: string) {
+    return await this.userModel.findOne({ phone });
+  }
 }
