@@ -1,5 +1,5 @@
 import * as multer from 'multer';
-import * as mkdirp from 'mkdirp';
+import { mkdirp } from 'mkdirp';
 import * as fs from 'fs';
 const getUrlImage = () => {
   const year = new Date().getFullYear();
@@ -12,7 +12,7 @@ const getUrlImage = () => {
 export const ImageStorage = multer.diskStorage({
   destination: (req, file, cb) => {
     const dir = getUrlImage();
-    mkdirp(dir, (err) => cb(null, dir));
+    mkdirp(dir).then((err: any) => cb(err, dir));
   },
   filename: (req, file, cb) => {
     const filePath = getUrlImage() + '/' + file.originalname;

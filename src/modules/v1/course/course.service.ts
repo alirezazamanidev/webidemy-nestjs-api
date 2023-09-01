@@ -1,15 +1,40 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
+import { PaginateModel } from 'mongoose';
 import { Course } from 'src/common/interfaces/course.intreface';
 import { CreateCourseDTO } from '../admin/dto/admin.dto';
 import * as path from 'path';
 import * as sharp from 'sharp';
 import slugify from 'slugify';
 import { Messages } from 'src/common/enums/message.enum';
+import { BasePaginateDTO } from 'src/common/dtos/base-paginate.dto';
 @Injectable()
 export class CourseService {
-  constructor(@InjectModel('Course') private courseModel: Model<Course>) {}
+  constructor(
+    @InjectModel('Course') private courseModel: PaginateModel<Course>,
+  ) {}
+  async showAdminPanelCourses(BasePaginateDTO: BasePaginateDTO) {
+    const { page, item_count } = BasePaginateDTO;
+
+    const courses = await this.courseModel.paginate(
+      {},
+      {
+        page,
+        limit: item_count,
+        populate: [
+          {
+            path: 'teacher',
+          },
+        ],
+      },
+    );
+    return {
+      data: courses.docs,
+      limit: courses.limit,
+      page: courses.page,
+      pages: courses.pages,
+    };
+  }
 
   async store(courseDTO: CreateCourseDTO) {
     const {
