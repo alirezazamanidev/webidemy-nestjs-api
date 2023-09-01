@@ -5,8 +5,14 @@ import { getMongoURL } from './config/database/mongoose.config';
 import { UserModule } from './modules/v1/user/user.module';
 import { AdminModule } from './modules/v1/admin/admin.module';
 import { CourseModule } from './modules/v1/course/course.module';
+import { HomeModule } from './modules/v1/home/home.module';
 
 @Module({
-  imports: [AuthModule, MongooseModule.forRoot(getMongoURL()), UserModule, AdminModule, CourseModule],
+  imports: [
+    AuthModule,
+    MongooseModule.forRoot(getMongoURL()),
+    AdminModule,
+    HomeModule,
+  ],
 })
 export class AppModule {}

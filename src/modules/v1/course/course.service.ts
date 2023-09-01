@@ -13,6 +13,27 @@ export class CourseService {
   constructor(
     @InjectModel('Course') private courseModel: PaginateModel<Course>,
   ) {}
+
+  // home panel route
+  async showNewCoursesInHomePage() {
+    const courses = await this.courseModel
+      .find()
+      .populate({
+        path: 'teacher',
+      })
+      .sort({ createdAt: -1 })
+      .limit(8);
+
+    return courses;
+  }
+  async singleCourseBySlug(slug: string) {
+    const course = await this.courseModel.findOne({ slug });
+
+    if (!course) throw new BadRequestException('the course not found!');
+    return course;
+  }
+
+  // admin panel route
   async showAdminPanelCourses(BasePaginateDTO: BasePaginateDTO) {
     const { page, item_count } = BasePaginateDTO;
 
