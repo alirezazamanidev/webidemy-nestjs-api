@@ -1,18 +1,17 @@
-// import { UseInterceptors, applyDecorators } from '@nestjs/common';
-// import { ImageStorage } from '../helpers/uploadImage.helper';
-// import { FileInterceptor } from '@nestjs/platform-express';
-// import { videoStorage } from '../helpers/uploadVideo.helper';
-// import { ImageAvatarStorage } from '../helpers/uploadAvatar';
+import { UseInterceptors, applyDecorators } from '@nestjs/common';
 
-// export const UploadImageFile = (data: string) => {
-//   return applyDecorators(
-//     UseInterceptors(
-//       FileInterceptor(data, {
-//         storage: ImageStorage,
-//       }),
-//     ),
-//   );
-// };
+import { FileInterceptor } from '@nestjs/platform-express';
+import { ImageStorage } from '../helpers/uploadImages';
+
+export const UploadImageFile = (data: string) => {
+  return applyDecorators(
+    UseInterceptors(
+      FileInterceptor(data, {
+        storage: ImageStorage,
+      }),
+    ),
+  );
+};
 
 // export const UploadAvatarImageFile = (data: string) => {
 //   return applyDecorators(
