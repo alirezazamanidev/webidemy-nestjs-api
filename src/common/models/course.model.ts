@@ -18,6 +18,7 @@ const courseSchema = new Schema(
       fromColor: { type: String, required: true },
       toColor: { type: String, required: true },
     },
+    seasons: [{ type: Schema.Types.ObjectId, ref: 'Season' }],
     viewCount: { type: Number, default: 0 },
     commentCount: { type: Number, default: 0 },
     time: { type: String, default: '00:00:00' },
