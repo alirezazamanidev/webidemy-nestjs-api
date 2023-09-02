@@ -2,9 +2,10 @@ import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { PaginateModel } from 'mongoose';
 import { Course } from 'src/common/interfaces/course.intreface';
-import { CreateCourseDTO } from '../admin/dto/admin.dto';
+import { CreateCourseDTO, UpdateCourseDTO } from '../admin/dto/admin.dto';
 import * as path from 'path';
 import * as sharp from 'sharp';
+import * as fs from 'fs';
 import slugify from 'slugify';
 import { Messages } from 'src/common/enums/message.enum';
 import { BasePaginateDTO } from 'src/common/dtos/base-paginate.dto';
@@ -94,6 +95,70 @@ export class CourseService {
       tags,
     });
     return await newCourse.save();
+  }
+  async EditOneCourse(courseID: string): Promise<Course> {
+    const course = await this.courseModel.findById(courseID);
+
+    if (!course) throw new BadRequestException('The course not founded');
+
+    return course;
+  }
+  async updateOneCourse(courseId: string, courseDTO: UpdateCourseDTO) {
+    const {
+      user,
+      title,
+      body,
+      description,
+      fromColor,
+      toColor,
+      type,
+      condition,
+      price,
+      file,
+    } = courseDTO;
+    const course = await this.courseModel.findById(courseId);
+    const objectforUpdate = {};
+    if (file) {
+      Object.values(course.photos).forEach((image) =>
+        fs.unlinkSync(`./public${image}`),
+      );
+      objectforUpdate['photos'] = this.ResizeImage(file);
+    } else {
+      objectforUpdate['photos'] = course.photos;
+    }
+    await course.updateOne({
+      $set: {
+        teacher: user.id,
+        title,
+        slug: slugify(title, '-'),
+        body,
+        type,
+        gradientColorCard: {
+          toColor,
+          fromColor,
+        },
+        description,
+        condition,
+        price,
+        ...objectforUpdate,
+      },
+    });
+
+    return {
+      status: 'success',
+    };
+  }
+  async destroy(courseId: string) {
+    const course = await this.courseModel.findById(courseId);
+    if (!course) throw new BadRequestException('the id is not true!');
+    // delete Images
+    Object.values(course.photos).forEach((image) =>
+      fs.unlinkSync(`./public${image}`),
+    );
+    course.deleteOne();
+    return {
+      status: 'sucess',
+    };
   }
   private ResizeImage(image: Express.Multer.File) {
     const imageInfo = path.parse(image.path);

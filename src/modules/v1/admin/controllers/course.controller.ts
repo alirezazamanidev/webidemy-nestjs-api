@@ -1,15 +1,18 @@
 import {
   Controller,
+  Delete,
   Get,
   HttpCode,
   HttpStatus,
+  Param,
   Post,
+  Put,
   Query,
 } from '@nestjs/common';
 import { CourseService } from '../../course/course.service';
 import { UploadImageFile } from 'src/common/decorators/uploadFile.decorator';
 import { GetCurrentCourse } from 'src/common/decorators/get-current-course.decorator';
-import { CreateCourseDTO } from '../dto/admin.dto';
+import { CreateCourseDTO, UpdateCourseDTO } from '../dto/admin.dto';
 import { Auth } from 'src/common/decorators/Auth.decorator';
 import { BasePaginateDTO } from 'src/common/dtos/base-paginate.dto';
 
@@ -31,5 +34,27 @@ export class CourseController {
   @UploadImageFile('photo')
   async createCourse(@GetCurrentCourse() courseDTO: CreateCourseDTO) {
     return await this.courseService.store(courseDTO);
+  }
+  @HttpCode(HttpStatus.OK)
+  @Get('edit/:courseId')
+  async GetOneCourseForEdit(@Param('courseId') courseId: string) {
+    return {
+      status: 'success',
+      course: await this.courseService.EditOneCourse(courseId),
+    };
+  }
+  @HttpCode(HttpStatus.OK)
+  @Put('/edit/:id')
+  @UploadImageFile('photo')
+  async Update(
+    @Param('id') courseId: string,
+    @GetCurrentCourse() courseDTO: UpdateCourseDTO,
+  ) {
+    return await this.courseService.updateOneCourse(courseId, courseDTO);
+  }
+  @HttpCode(HttpStatus.OK)
+  @Delete(':courseId')
+  async deleteCourse(@Param('courseId') courseId: string) {
+    return await this.courseService.destroy(courseId);
   }
 }

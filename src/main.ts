@@ -13,7 +13,7 @@ async function bootstrap() {
     type: VersioningType.URI,
   });
   app.use(cookieParser());
-  app.useGlobalFilters(...getGlobalFilters(httpAdapter));
+  // app.useGlobalFilters(...getGlobalFilters(httpAdapter));
   app.useStaticAssets('public');
 
   app.setGlobalPrefix('/api');

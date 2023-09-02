@@ -24,4 +24,5 @@ export class CourseController {
       course: await this.courseService.singleCourseBySlug(slug),
     };
   }
+
 }

@@ -25,3 +25,27 @@ export class CreateCourseDTO {
   @IsNotEmpty()
   type: string;
 }
+export class UpdateCourseDTO {
+  @IsNotEmpty()
+  user: User;
+  @IsNotEmpty()
+  title: string;
+  @IsNotEmpty()
+  body: string;
+  @IsNotEmpty()
+  description: string;
+  file?: Express.Multer.File;
+  @IsNotEmpty()
+  condition: string;
+  @IsNotEmpty()
+  price: string;
+  @IsNotEmpty()
+  fromColor: string;
+  @IsNotEmpty()
+  toColor: string;
+
+  @IsNotEmpty()
+  tags: string;
+  @IsNotEmpty()
+  type: string;
+}
