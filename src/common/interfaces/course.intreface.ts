@@ -1,7 +1,7 @@
-import { Document, ObjectId } from 'mongoose';
+import { Document } from 'mongoose';
 import { User } from './user.interface';
 export interface Course extends Document {
-  id: ObjectId;
+  id: string;
   teacher: User;
   title: string;
   slug: string;

@@ -29,6 +29,11 @@ export class CourseController {
   async Index(@Query() BasePaginateDTO: BasePaginateDTO) {
     return await this.courseService.showAdminPanelCourses(BasePaginateDTO);
   }
+  @HttpCode(HttpStatus.OK)
+  @Get('getAll')
+  async GetAll() {
+    return await this.courseService.findAll();
+  }
   @HttpCode(HttpStatus.CREATED)
   @Post('create')
   @UploadImageFile('photo')

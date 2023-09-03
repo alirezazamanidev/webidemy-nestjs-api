@@ -49,3 +49,11 @@ export class UpdateCourseDTO {
   @IsNotEmpty()
   type: string;
 }
+export class createSeasonDTO {
+  @IsNotEmpty()
+  title: string;
+  @IsNotEmpty()
+  number: number;
+  @IsNotEmpty()
+  course: string;
+}

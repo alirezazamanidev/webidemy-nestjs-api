@@ -11,5 +11,4 @@ export interface User extends Document {
   email?: string;
   createdAt: Date;
   updatedAt: Date;
-
 }
