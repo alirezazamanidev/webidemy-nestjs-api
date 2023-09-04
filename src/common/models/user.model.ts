@@ -10,6 +10,7 @@ export const userSchema = new Schema(
     email: { type: String },
     phone: { type: String, required: true },
     avatar: { type: String, default: '' },
+    hashRt: { type: String, default: null },
   },
   { timestamps: true },
 );

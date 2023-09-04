@@ -1,10 +1,16 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  ForbiddenException,
+  Injectable,
+} from '@nestjs/common';
 import { LoginDTO, RegisterDTO } from './dtos/auth.dto';
 import { UserService } from '../user/user.service';
 import { User } from 'src/common/interfaces/user.interface';
 import { JwtService } from '@nestjs/jwt';
-import { JWTpayload } from './types/JwtPayload.type';
 import { Messages } from 'src/common/enums/message.enum';
+import { JwtPayload } from './types/jwtpayload.type';
+import { Tokens } from './types/Tokens.type';
+import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class AuthService {
@@ -14,32 +20,56 @@ export class AuthService {
   ) {}
   async SignUp(userDTO: RegisterDTO) {
     const user = await this.userService.create(userDTO);
-    const token = await this.createToken(user);
-    return token;
+    const tokens = await this.createTokens(user);
+    await this.userService.updateHashRt(user?.id, tokens.refresh_token);
+    return tokens;
   }
 
   async SignIn(userDTO: LoginDTO) {
     const user = await this.userService.findOneByPhone(userDTO?.phone);
     if (!user) throw new BadRequestException(Messages.PHONE_NOT_EXIST);
-    const token = await this.createToken(user);
-    return token;
+    const tokens = await this.createTokens(user);
+    await this.userService.updateHashRt(user?.id, tokens.refresh_token);
+    return tokens;
   }
 
-  private async createToken(user: User) {
-    const jwtpayload: JWTpayload = {
+  private async createTokens(user: User): Promise<Tokens> {
+    const jwtPayload: JwtPayload = {
       id: user.id,
       fullname: user.fullname,
       username: user.username,
       phone: user.phone,
-      avatar: user.avatar,
+      email: user.email,
       active: user.active,
+
       admin: user.admin,
     };
 
-    const token = await this.jwtService.sign(jwtpayload, {
-      secret: process.env.JWT_KEY,
-      expiresIn: '7d',
-    });
-    return token;
+    const [at, rt] = await Promise.all([
+      this.jwtService.sign(jwtPayload, {
+        secret: process.env.ACCESS_TOKEN_SECRET_KEY,
+        expiresIn: '5m',
+      }),
+      this.jwtService.sign(
+        { id: user.id },
+        {
+          secret: process.env.REFRESH_TOKEN_SECRET_KEY,
+          expiresIn: '7d',
+        },
+      ),
+    ]);
+    return {
+      access_token: at,
+      refresh_token: rt,
+    };
+  }
+  async RefreshToken(userId: string, rt: string): Promise<Tokens> {
+    const user = await this.userService.findById(userId);
+    if (!user || !user.hashRt) throw new ForbiddenException('Access Denied');
+    const checkerRT = await bcrypt.compare(rt, user.hashRt);
+    if (!checkerRT) throw new ForbiddenException('Access Denied');
+    const tokens = await this.createTokens(user);
+    await this.userService.updateHashRt(user.id, tokens.refresh_token);
+    return tokens;
   }
 }

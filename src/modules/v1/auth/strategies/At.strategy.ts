@@ -2,28 +2,26 @@ import { ExtractJwt, Strategy } from 'passport-jwt';
 import { PassportStrategy } from '@nestjs/passport';
 import { Injectable } from '@nestjs/common';
 import { Request } from 'express';
-import { JWTpayload } from '../types/JwtPayload.type';
+import { JwtPayload } from '../types/jwtpayload.type';
 @Injectable()
-export class JWTStrategy extends PassportStrategy(Strategy) {
+export class AccessTokenStrategy extends PassportStrategy(Strategy) {
   constructor() {
     super({
       jwtFromRequest: ExtractJwt.fromExtractors([
         (request: Request) => {
           let token = null;
           if (request && request.cookies) {
-            token = request.cookies['webidemy_token'];
+            token = request.cookies['x-access-token'];
           }
-          console.log(token);
-
           return token;
         },
       ]),
       ignoreExpiration: false,
-      secretOrKey: process.env.JWT_KEY,
+      secretOrKey: process.env.ACCESS_TOKEN_SECRET_KEY,
     });
   }
 
-  async validate(payload: JWTpayload) {
+  async validate(payload: JwtPayload) {
     return payload;
   }
 }
