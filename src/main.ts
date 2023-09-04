@@ -7,7 +7,7 @@ import cookieParser = require('cookie-parser');
 import { NestExpressApplication } from '@nestjs/platform-express';
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
-  app.enableCors({ origin: [process.env.URL_CLIENT], credentials: true });
+  app.enableCors({ origin: ['https://webidemyyy.ir'], credentials: true });
   const httpAdapter = app.get(HttpAdapterHost);
   app.enableVersioning({
     type: VersioningType.URI,
