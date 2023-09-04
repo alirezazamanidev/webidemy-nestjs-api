@@ -13,6 +13,8 @@ export class JWTStrategy extends PassportStrategy(Strategy) {
           if (request && request.cookies) {
             token = request.cookies['webidemy_token'];
           }
+          console.log(token);
+          
           return token;
         },
       ]),
