@@ -28,7 +28,12 @@ export class CourseService {
     return courses;
   }
   async singleCourseBySlug(slug: string) {
-    const course = await this.courseModel.findOne({ slug });
+    const course = await this.courseModel.findOne({ slug }).populate([
+      {
+        path: 'seasons',
+        populate: ['episodes'],
+      },
+    ]);
 
     if (!course) throw new BadRequestException('the course not found!');
     return course;

@@ -40,6 +40,7 @@ export class CourseController {
   async createCourse(@GetCurrentCourse() courseDTO: CreateCourseDTO) {
     return await this.courseService.store(courseDTO);
   }
+
   @HttpCode(HttpStatus.OK)
   @Get('edit/:courseId')
   async GetOneCourseForEdit(@Param('courseId') courseId: string) {

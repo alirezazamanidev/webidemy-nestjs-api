@@ -8,6 +8,13 @@ export const seasonCourseSchema = new Schema(
     title: { type: String, required: true },
     number: { type: Number, required: true },
   },
-  { timestamps: true },
+  { timestamps: true, toJSON: { virtuals: true } },
 );
+
+seasonCourseSchema.virtual('episodes', {
+  ref: 'Episode',
+  localField: '_id',
+  foreignField: 'season',
+});
+
 seasonCourseSchema.plugin(mongoosePaginate);

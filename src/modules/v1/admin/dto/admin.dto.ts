@@ -57,3 +57,19 @@ export class createSeasonDTO {
   @IsNotEmpty()
   course: string;
 }
+export class CreateEpisodeDTO {
+  @IsNotEmpty()
+  season: string;
+  @IsNotEmpty()
+  title: string;
+  @IsNotEmpty()
+  body: string;
+  @IsNotEmpty()
+  type: string;
+  @IsNotEmpty()
+  file: Express.Multer.File;
+  @IsNotEmpty()
+  time: number;
+  @IsNotEmpty()
+  number: number;
+}
