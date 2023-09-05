@@ -57,6 +57,16 @@ export class CourseService {
           {
             path: 'teacher',
           },
+          {
+            path: 'seasons',
+            select: 'title',
+            populate: [
+              {
+                path: 'episodes',
+                select: 'title',
+              },
+            ],
+          },
         ],
       },
     );

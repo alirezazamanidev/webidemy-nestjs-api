@@ -2,18 +2,22 @@ import {
   BadRequestException,
   Injectable,
   InternalServerErrorException,
+  NotFoundException,
 } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { PaginateModel } from 'mongoose';
 import { SeasonCourse } from 'src/common/interfaces/season.interface';
-import { createSeasonDTO } from '../admin/dto/admin.dto';
+import { EditSeasonDTO, createSeasonDTO } from '../admin/dto/admin.dto';
 import { Messages } from 'src/common/enums/message.enum';
 import { BasePaginateDTO } from 'src/common/dtos/base-paginate.dto';
 import * as fs from 'fs';
+import { isMongoId } from 'class-validator';
+import { Course } from 'src/common/interfaces/course.intreface';
 @Injectable()
 export class SeasonService {
   constructor(
     @InjectModel('Season') private seasonModel: PaginateModel<SeasonCourse>,
+    @InjectModel('Course') private courseModel: PaginateModel<Course>,
   ) {}
   // admin panel
   async ShowSeasonInadminpanel(BasePaginateDTO: BasePaginateDTO) {
@@ -26,8 +30,10 @@ export class SeasonService {
         limit: item_count,
         populate: [
           {
-            path: 'course',
+            path: 'episodes',
+            select: 'title',
           },
+          'course',
         ],
       },
     );
@@ -38,7 +44,10 @@ export class SeasonService {
       pages: sessons.pages,
     };
   }
-  async create(seasonDTO: createSeasonDTO) {
+  async create() {
+    return await this.courseModel.find({});
+  }
+  async store(seasonDTO: createSeasonDTO) {
     const { title, course, number } = seasonDTO;
 
     const sesson = await this.seasonModel.findOne({ title }).populate('course');
@@ -61,7 +70,20 @@ export class SeasonService {
       throw new InternalServerErrorException(err.message);
     }
   }
+  async getOneForEdit(seasonId) {
+    if (!isMongoId(seasonId))
+      throw new BadRequestException('The seasonId is not  true');
+    const season = await this.seasonModel.findById(seasonId).populate({
+      path: 'course',
+      select: 'title',
+    });
+    if (!season) throw new NotFoundException('The Season not found');
+
+    return season;
+  }
   async Destroy(seasonId: string) {
+    if (!isMongoId(seasonId))
+      throw new BadRequestException('The seasonId is not  true');
     const season = await this.seasonModel
       .findById(seasonId)
       .populate(['episodes']);
@@ -75,6 +97,19 @@ export class SeasonService {
 
     //delete seasson
     season.deleteOne();
+    return {
+      status: 'success',
+    };
+  }
+  async update(seasonId: string, seasonDTO: EditSeasonDTO) {
+    if (!isMongoId(seasonId))
+      throw new BadRequestException('The season Id is not true!');
+
+    const season = await this.seasonModel.findById(seasonId);
+    if (!season) throw new NotFoundException('The season is not found');
+
+    await season.updateOne({ $set: { ...seasonDTO } });
+
     return {
       status: 'success',
     };

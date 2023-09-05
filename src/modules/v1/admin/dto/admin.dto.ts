@@ -73,3 +73,12 @@ export class CreateEpisodeDTO {
   @IsNotEmpty()
   number: number;
 }
+
+export class EditSeasonDTO {
+  @IsNotEmpty()
+  title: string;
+  @IsNotEmpty()
+  number: string;
+  @IsNotEmpty()
+  course: string;
+}

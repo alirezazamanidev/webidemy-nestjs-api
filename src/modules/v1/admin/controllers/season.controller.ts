@@ -7,10 +7,11 @@ import {
   HttpStatus,
   Param,
   Post,
+  Put,
   Query,
 } from '@nestjs/common';
 import { SeasonService } from '../../season/season.service';
-import { createSeasonDTO } from '../dto/admin.dto';
+import { EditSeasonDTO, createSeasonDTO } from '../dto/admin.dto';
 import { Auth } from 'src/common/decorators/Auth.decorator';
 import { BasePaginateDTO } from 'src/common/dtos/base-paginate.dto';
 
@@ -30,11 +31,29 @@ export class SeasonController {
   @HttpCode(HttpStatus.CREATED)
   @Post('/create')
   Store(@Body() seasonDTO: createSeasonDTO) {
-    return this.seasonService.create(seasonDTO);
+    return this.seasonService.store(seasonDTO);
+  }
+  @HttpCode(HttpStatus.OK)
+  @Get('/create')
+  async create() {
+    return await this.seasonService.create();
   }
   @HttpCode(HttpStatus.OK)
   @Delete(':seasonId')
   async DeleteOne(@Param('seasonId') seasonId: string) {
     return await this.seasonService.Destroy(seasonId);
+  }
+  @HttpCode(HttpStatus.OK)
+  @Get('/edit/:seasonId')
+  async getOneSeasonForEdit(@Param('seasonId') seasonId: string) {
+    return await this.seasonService.getOneForEdit(seasonId);
+  }
+  @HttpCode(HttpStatus.OK)
+  @Put('/edit/:seasonId')
+  async Update(
+    @Body() seasonDTO: EditSeasonDTO,
+    @Param('seasonId') seasonId: string,
+  ) {
+    return await this.seasonService.update(seasonId, seasonDTO);
   }
 }
