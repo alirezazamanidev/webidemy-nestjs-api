@@ -25,48 +25,18 @@ export class AuthController {
   @HttpCode(HttpStatus.CREATED)
   @Post('local/signUp')
   async RegisterUser(
-    @Request()
     @Body()
     userDTO: RegisterDTO,
-    @Response() res,
   ) {
     const tokens = await this.authService.SignUp(userDTO);
-    res
-      .cookie('x-access-token', tokens.access_token, {
-        expires: new Date(new Date().getTime() + 30 * 1000),
-        sameSite: 'lax',
-        httpOnly: true,
-      })
-      .cookie('x-refresh-token', tokens.refresh_token, {
-        expires: new Date(new Date().getTime() + 604800000),
-        sameSite: 'lax',
-        httpOnly: true,
-      })
-      .status(201)
-      .json({
-        status: 'success',
-      });
+    return tokens;
   }
 
   @HttpCode(HttpStatus.OK)
   @Post('local/signIn')
-  async LoginUser(@Body() userDTO: LoginDTO, @Response() res) {
+  async LoginUser(@Body() userDTO: LoginDTO) {
     const tokens = await this.authService.SignIn(userDTO);
-    res
-      .cookie('x-access-token', tokens.access_token, {
-        expires: new Date(new Date().getTime() + 30 * 1000),
-        sameSite: 'lax',
-        httpOnly: true,
-      })
-      .cookie('x-refresh-token', tokens.refresh_token, {
-        expires: new Date(new Date().getTime() + 604800000),
-        sameSite: 'lax',
-        httpOnly: true,
-      })
-      .status(200)
-      .json({
-        status: 'success',
-      });
+    return tokens;
   }
   @HttpCode(HttpStatus.OK)
   @Auth()
@@ -81,24 +51,8 @@ export class AuthController {
   async RefreshTokens(
     @GetCurrentUserId() userId: string,
     @GetCurrentUser('refresh_token') refreshToken: string,
-    @Response() res,
   ) {
-    
     const tokens = await this.authService.RefreshToken(userId, refreshToken);
-    res
-      .cookie('x-access-token', tokens.access_token, {
-        expires: new Date(new Date().getTime() + 30 * 1000),
-        sameSite: 'lax',
-        httpOnly: true,
-      })
-      .cookie('x-refresh-token', tokens.refresh_token, {
-        expires: new Date(new Date().getTime() + 604800000),
-        sameSite: 'lax',
-        httpOnly: true,
-      })
-      .status(200)
-      .json({
-        status: 'success',
-      });
+    return tokens;
   }
 }
