@@ -9,7 +9,7 @@ import { SeasonCourse } from 'src/common/interfaces/season.interface';
 import { createSeasonDTO } from '../admin/dto/admin.dto';
 import { Messages } from 'src/common/enums/message.enum';
 import { BasePaginateDTO } from 'src/common/dtos/base-paginate.dto';
-
+import * as fs from 'fs';
 @Injectable()
 export class SeasonService {
   constructor(
@@ -60,5 +60,23 @@ export class SeasonService {
     } catch (err) {
       throw new InternalServerErrorException(err.message);
     }
+  }
+  async Destroy(seasonId: string) {
+    const season = await this.seasonModel
+      .findById(seasonId)
+      .populate(['episodes']);
+    if (!season) throw new BadRequestException(Messages.SEASON_NOT_EXIST);
+
+    // delete video episodes
+    season.episodes.forEach((episode) => {
+      fs.unlinkSync(`./public${episode?.videoUrl}`);
+    });
+    season.episodes.forEach((episode) => episode.deleteOne());
+
+    //delete seasson
+    season.deleteOne();
+    return {
+      status: 'success',
+    };
   }
 }

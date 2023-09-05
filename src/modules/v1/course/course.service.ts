@@ -1,4 +1,8 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { PaginateModel } from 'mongoose';
 import { Course } from 'src/common/interfaces/course.intreface';
@@ -7,6 +11,7 @@ import * as path from 'path';
 import * as sharp from 'sharp';
 import * as fs from 'fs';
 import slugify from 'slugify';
+import isMongoId from 'validator/lib/isMongoId';
 import { Messages } from 'src/common/enums/message.enum';
 import { BasePaginateDTO } from 'src/common/dtos/base-paginate.dto';
 @Injectable()
@@ -104,10 +109,13 @@ export class CourseService {
     });
     return await newCourse.save();
   }
-  async EditOneCourse(courseID: string): Promise<Course> {
+  async EditOneCourse(courseID: string) {
+    if (!isMongoId(courseID))
+      throw new BadRequestException('the CourseId not true');
+
     const course = await this.courseModel.findById(courseID);
 
-    if (!course) throw new BadRequestException('The course not founded');
+    if (!course) throw new NotFoundException('The course not founded');
 
     return course;
   }
@@ -124,6 +132,8 @@ export class CourseService {
       price,
       file,
     } = courseDTO;
+    if (!isMongoId(courseId))
+      throw new BadRequestException('The course Id is Not True!');
     const course = await this.courseModel.findById(courseId);
     const objectforUpdate = {};
     if (file) {
@@ -157,12 +167,31 @@ export class CourseService {
     };
   }
   async destroy(courseId: string) {
-    const course = await this.courseModel.findById(courseId);
-    if (!course) throw new BadRequestException('the id is not true!');
+    if (!isMongoId(courseId))
+      throw new BadRequestException('The CourseId Is not true!');
+    const course = await this.courseModel.findById(courseId).populate([
+      {
+        path: 'seasons',
+        populate: ['episodes'],
+      },
+    ]);
+    if (!course) throw new NotFoundException('the id is not true!');
+
     // delete Images
     Object.values(course.photos).forEach((image) =>
       fs.unlinkSync(`./public${image}`),
     );
+
+    //delete video episodes and episodes
+    course.seasons.forEach((season) => {
+      season.episodes.forEach((episode) => {
+        fs.unlinkSync(`./public/${episode.videoUrl}`);
+        episode.deleteOne();
+      });
+    });
+
+    // delete seasons
+    course.seasons.forEach((season) => season.deleteOne());
     course.deleteOne();
     return {
       status: 'sucess',

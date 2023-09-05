@@ -1,9 +1,11 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   HttpCode,
   HttpStatus,
+  Param,
   Post,
   Query,
 } from '@nestjs/common';
@@ -29,5 +31,10 @@ export class SeasonController {
   @Post('/create')
   Store(@Body() seasonDTO: createSeasonDTO) {
     return this.seasonService.create(seasonDTO);
+  }
+  @HttpCode(HttpStatus.OK)
+  @Delete(':seasonId')
+  async DeleteOne(@Param('seasonId') seasonId: string) {
+    return await this.seasonService.Destroy(seasonId);
   }
 }

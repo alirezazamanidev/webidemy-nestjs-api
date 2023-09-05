@@ -1,5 +1,6 @@
 import { Document } from 'mongoose';
 import { User } from './user.interface';
+import { SeasonCourse } from './season.interface';
 export interface Course extends Document {
   id: string;
   teacher: User;
@@ -11,6 +12,7 @@ export interface Course extends Document {
   condition: string;
   photos: object;
   tags: string;
+  seasons: SeasonCourse[];
   price: string;
   gradientColorCard: {
     fromColor: string;
