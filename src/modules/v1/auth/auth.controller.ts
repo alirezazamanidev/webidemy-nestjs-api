@@ -6,7 +6,6 @@ import {
   HttpStatus,
   Post,
   Request,
-  Response,
   UseGuards,
 } from '@nestjs/common';
 import { LoginDTO, RegisterDTO } from './dtos/auth.dto';
@@ -47,7 +46,7 @@ export class AuthController {
 
   @HttpCode(HttpStatus.OK)
   @UseGuards(AuthGuard('jwt-refresh'))
-  @Get('/refresh')
+  @Post('/refresh')
   async RefreshTokens(
     @GetCurrentUserId() userId: string,
     @GetCurrentUser('refresh_token') refreshToken: string,

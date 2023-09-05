@@ -15,10 +15,9 @@ export class RefreshTokenStrategy extends PassportStrategy(
       jwtFromRequest: ExtractJwt.fromExtractors([
         (req: Request) => {
           let token = null;
-          if (req && req.headers) {
-            token = req.headers['refresh_token'];
+          if (req && req.body) {
+            token = req.body['refreshToken'];
           }
-          
 
           return token;
         },
@@ -30,7 +29,7 @@ export class RefreshTokenStrategy extends PassportStrategy(
   }
 
   async validate(req: Request, payload: JwtPayload): Promise<JwtpayloadWithRt> {
-    const refreshToken = req.headers['refresh_token'] as string;
+    const refreshToken = req.body['refreshToken'] as string;
     if (!refreshToken) throw new ForbiddenException('Refresh token malformed');
     return {
       ...payload,
