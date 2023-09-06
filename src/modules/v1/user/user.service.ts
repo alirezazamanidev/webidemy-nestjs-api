@@ -4,16 +4,66 @@ import {
   InternalServerErrorException,
   NotFoundException,
 } from '@nestjs/common';
+import * as fs from 'fs';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
+import { Model, PaginateModel } from 'mongoose';
 import { User } from 'src/common/interfaces/user.interface';
 import { RegisterDTO } from '../auth/dtos/auth.dto';
 import { Messages } from 'src/common/enums/message.enum';
 import slugify from 'slugify';
 import * as bcrypt from 'bcrypt';
+import { BasePaginateDTO } from 'src/common/dtos/base-paginate.dto';
+import isMongoId from 'validator/lib/isMongoId';
 @Injectable()
 export class UserService {
-  constructor(@InjectModel('User') private userModel: Model<User>) {}
+  constructor(@InjectModel('User') private userModel: PaginateModel<User>) {}
+
+  // admin route
+  async ShowUsersInadminPanel(BasePaginateDTO: BasePaginateDTO) {
+    const { page, item_count } = BasePaginateDTO;
+
+    const courses = await this.userModel.paginate(
+      {},
+      {
+        page,
+        limit: item_count,
+      },
+    );
+    return {
+      data: courses.docs,
+      limit: courses.limit,
+      page: courses.page,
+      pages: courses.pages,
+    };
+  }
+
+  async destroy(userId: string) {
+    if (!isMongoId(userId))
+      throw new BadRequestException('The user id is not true');
+    const user = await this.userModel.findById(userId);
+    if (!user) throw new NotFoundException('The user not found');
+    if (user.avatar) {
+      fs.unlinkSync(`./public/${user.avatar}`);
+    }
+    user.deleteOne();
+    return {
+      status: 'success',
+    };
+  }
+  async toggleAdmin(userId: string) {
+    if (!isMongoId(userId))
+      throw new BadRequestException('The user id is not true');
+    const user = await this.userModel.findById(userId);
+    if (!user) throw new NotFoundException('The user not found');
+
+    await user.updateOne({ $set: { admin: !user.admin } });
+
+    return {
+      status: 'success',
+    };
+  }
+
+  // auth route
 
   async create(userDTO: RegisterDTO) {
     const { phone, fullname } = userDTO;

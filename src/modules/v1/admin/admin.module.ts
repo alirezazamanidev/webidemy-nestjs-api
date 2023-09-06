@@ -5,8 +5,16 @@ import { SeasonController } from './controllers/season.controller';
 import { SeasonModule } from '../season/season.module';
 import { EpisodeController } from './controllers/episode.controller';
 import { EpisodeModule } from '../episode/episode.module';
+import { UserController } from './controllers/user.controller';
+import { UserModule } from '../user/user.module';
+
 @Module({
-  imports: [CourseModule, SeasonModule, EpisodeModule],
-  controllers: [CourseController, SeasonController, EpisodeController],
+  imports: [CourseModule, SeasonModule, EpisodeModule, UserModule],
+  controllers: [
+    CourseController,
+    SeasonController,
+    EpisodeController,
+    UserController,
+  ],
 })
 export class AdminModule {}

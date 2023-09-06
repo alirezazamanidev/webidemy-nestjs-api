@@ -7,8 +7,8 @@ export interface User extends Document {
   phone: string;
   active: boolean;
   admin: boolean;
-  avatar?: string;
-  email?: string;
+  avatar: string;
+  email: string;
   hashRt: string;
   createdAt: Date;
   updatedAt: Date;

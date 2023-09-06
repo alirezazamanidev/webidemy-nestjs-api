@@ -77,10 +77,6 @@ export class CourseService {
       pages: courses.pages,
     };
   }
-  async findAll() {
-    return await this.courseModel.find({});
-  }
-
   async store(courseDTO: CreateCourseDTO) {
     const {
       title,
