@@ -82,3 +82,20 @@ export class EditSeasonDTO {
   @IsNotEmpty()
   course: string;
 }
+
+export class UpdateEpisodeDTO {
+  @IsNotEmpty()
+  season: string;
+  @IsNotEmpty()
+  title: string;
+  @IsNotEmpty()
+  body: string;
+  @IsNotEmpty()
+  type: string;
+  @IsNotEmpty()
+  file?: Express.Multer.File;
+  @IsNotEmpty()
+  time: number;
+  @IsNotEmpty()
+  number: number;
+}
