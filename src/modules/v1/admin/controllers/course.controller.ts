@@ -38,7 +38,7 @@ export class CourseController {
   @HttpCode(HttpStatus.OK)
   @Get('/create')
   async Create() {
-    return await this.courseService.create();
+    return await this.courseService.getCategorties();
   }
 
   @HttpCode(HttpStatus.OK)

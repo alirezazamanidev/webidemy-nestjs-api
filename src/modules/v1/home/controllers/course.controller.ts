@@ -29,6 +29,11 @@ export class CourseController {
   async FilterCurse(@Query() query: SearchCourseQueryDTO) {
     return await this.courseService.filter(query);
   }
+  @HttpCode(HttpStatus.OK)
+  @Get('getCategories')
+  async GetCategory() {
+    return await this.courseService.getCategorties();
+  }
 
   @HttpCode(HttpStatus.OK)
   @Get(':slug')

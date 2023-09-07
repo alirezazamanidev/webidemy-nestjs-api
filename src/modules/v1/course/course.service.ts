@@ -15,18 +15,20 @@ import isMongoId from 'validator/lib/isMongoId';
 import { Messages } from 'src/common/enums/message.enum';
 import { BasePaginateDTO } from 'src/common/dtos/base-paginate.dto';
 import { SearchCourseQueryDTO } from '../home/dtos/home.dto';
+import { Category } from 'src/common/interfaces/category.interface';
 @Injectable()
 export class CourseService {
   constructor(
     @InjectModel('Course') private courseModel: PaginateModel<Course>,
-    @InjectModel('Category') private categoryModel: PaginateModel<Course>,
+    @InjectModel('Category') private categoryModel: PaginateModel<Category>,
   ) {}
 
   // home panel route
+
   async filter(queryFilter: SearchCourseQueryDTO) {
     const query = {};
 
-    const { limit, page, search, sort } = queryFilter;
+    const { limit, page, search, sort, category } = queryFilter;
 
     if (search) {
       query['title'] = new RegExp(search, 'gi');
@@ -35,12 +37,19 @@ export class CourseService {
     const perPage = parseInt(limit) || 8;
     const currentPage = parseInt(page) || 1;
     const skip = (currentPage - 1) * perPage;
+    
 
+    if (category && category !== 'all') {
+      const cate = await this.categoryModel.findOne({ title: category });
+      if (cate) query['category'] = cate;
+    }
     const courses = this.courseModel.find({ ...query });
 
     if (sort === 'newest') {
       courses.sort({ createdAt: -1 });
     }
+
+   
     return await courses.skip(skip).limit(perPage).exec();
   }
 
@@ -105,7 +114,7 @@ export class CourseService {
       pages: courses.pages,
     };
   }
-  async create() {
+  async getCategorties() {
     return await this.categoryModel.find({});
   }
   async store(courseDTO: CreateCourseDTO) {

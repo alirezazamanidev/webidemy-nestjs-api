@@ -3,4 +3,5 @@ export class SearchCourseQueryDTO {
   page?: string;
   limit: string;
   search?: string;
+  category: string;
 }
