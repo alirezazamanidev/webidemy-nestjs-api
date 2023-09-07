@@ -14,6 +14,7 @@ import slugify from 'slugify';
 import isMongoId from 'validator/lib/isMongoId';
 import { Messages } from 'src/common/enums/message.enum';
 import { BasePaginateDTO } from 'src/common/dtos/base-paginate.dto';
+import { SearchCourseQueryDTO } from '../home/dtos/home.dto';
 @Injectable()
 export class CourseService {
   constructor(
@@ -21,6 +22,36 @@ export class CourseService {
   ) {}
 
   // home panel route
+  async filter(queryFilter: SearchCourseQueryDTO) {
+    const query = {};
+
+    const { limit, page, search, sort } = queryFilter;
+
+    if (search) {
+      query['title'] = new RegExp(search, 'gi');
+    }
+
+    const perPage = parseInt(limit) || 8;
+    const currentPage = parseInt(page) || 1;
+    const skip = (currentPage - 1) * perPage;
+
+    const courses = this.courseModel.find({ ...query });
+
+    if (sort === 'newest') {
+      courses.sort({ createdAt: -1 });
+    }
+    return await courses.skip(skip).limit(perPage).exec();
+  }
+
+  // async searchTitle(text: string) {
+  //   const query = {};
+  //   if (text) {
+  //     query['title'] = new RegExp(text, 'gi');
+  //     const courses = await this.courseModel.find({ ...query });
+  //     return courses;
+  //   }
+  //   return [];
+  // }
   async showNewCoursesInHomePage() {
     const courses = await this.courseModel
       .find()
@@ -53,6 +84,7 @@ export class CourseService {
       {
         page,
         limit: item_count,
+        sort: { createdAt: -1 },
         populate: [
           {
             path: 'teacher',

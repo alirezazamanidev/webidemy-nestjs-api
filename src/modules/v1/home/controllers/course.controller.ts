@@ -1,5 +1,13 @@
-import { Controller, Get, HttpCode, HttpStatus, Param } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  HttpCode,
+  HttpStatus,
+  Param,
+  Query,
+} from '@nestjs/common';
 import { CourseService } from '../../course/course.service';
+import { SearchCourseQueryDTO } from '../dtos/home.dto';
 
 @Controller({
   path: 'courses',
@@ -17,6 +25,12 @@ export class CourseController {
     };
   }
   @HttpCode(HttpStatus.OK)
+  @Get('filter')
+  async FilterCurse(@Query() query: SearchCourseQueryDTO) {
+    return await this.courseService.filter(query);
+  }
+
+  @HttpCode(HttpStatus.OK)
   @Get(':slug')
   async signleCourse(@Param('slug') slug: string) {
     return {
@@ -24,5 +38,4 @@ export class CourseController {
       course: await this.courseService.singleCourseBySlug(slug),
     };
   }
-
 }

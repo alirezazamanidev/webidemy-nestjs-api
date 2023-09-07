@@ -3,6 +3,9 @@ import * as mongoosePaginate from 'mongoose-paginate';
 const Schema = mongoose.Schema;
 const courseSchema = new Schema(
   {
+    categories: [
+      { type: Schema.Types.ObjectId, ref: 'Category', required: true },
+    ],
     teacher: { type: Schema.Types.ObjectId, ref: 'User', required: true },
     title: { type: String, required: true },
     slug: { type: String, required: true },
