@@ -99,3 +99,8 @@ export class UpdateEpisodeDTO {
   @IsNotEmpty()
   number: number;
 }
+
+export class createCategoryDTO {
+  @IsNotEmpty()
+  title: string;
+}

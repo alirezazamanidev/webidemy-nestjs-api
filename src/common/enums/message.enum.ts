@@ -6,4 +6,5 @@ export enum Messages {
   ALREADY_EXIST_COURSE = 'چنین دوره ای با این عنوان قبلا در سایت ثبت شده است',
   SEASON_HAS_ALREADY = 'فصلی با این عنوان برای دوره مورد نظر ثبت شده است',
   SEASON_NOT_EXIST = 'چنین فصلی وجود ندارد',
+  CATEGORY_HAS_EXIST = 'دسته بندی مورد نظر قبلا در سایت ثبت شده است',
 }

@@ -11,6 +11,7 @@ import { HomeModule } from './modules/v1/home/home.module';
     MongooseModule.forRoot(getMongoURL()),
     AdminModule,
     HomeModule,
+
   ],
 })
 export class AppModule {}

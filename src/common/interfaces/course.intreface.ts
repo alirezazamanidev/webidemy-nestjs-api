@@ -1,7 +1,9 @@
 import { Document } from 'mongoose';
 import { User } from './user.interface';
 import { SeasonCourse } from './season.interface';
+import { Category } from './category.interface';
 export interface Course extends Document {
+  category: Category;
   id: string;
   teacher: User;
   title: string;

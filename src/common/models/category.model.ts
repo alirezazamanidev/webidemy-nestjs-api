@@ -11,6 +11,6 @@ categorySchema.plugin(mongoosePaginate);
 categorySchema.virtual('courses', {
   ref: 'Course',
   localField: '_id',
-  foreignField: 'categories',
+  foreignField: 'category',
 });
 export { categorySchema };

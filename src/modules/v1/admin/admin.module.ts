@@ -7,14 +7,23 @@ import { EpisodeController } from './controllers/episode.controller';
 import { EpisodeModule } from '../episode/episode.module';
 import { UserController } from './controllers/user.controller';
 import { UserModule } from '../user/user.module';
+import { CategoryController } from './controllers/category.controller';
+import { CategoryModule } from '../category/category.module';
 
 @Module({
-  imports: [CourseModule, SeasonModule, EpisodeModule, UserModule],
+  imports: [
+    CourseModule,
+    SeasonModule,
+    EpisodeModule,
+    UserModule,
+    CategoryModule,
+  ],
   controllers: [
     CourseController,
     SeasonController,
     EpisodeController,
     UserController,
+    CategoryController,
   ],
 })
 export class AdminModule {}
