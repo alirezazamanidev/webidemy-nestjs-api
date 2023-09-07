@@ -7,6 +7,7 @@ import {
   HttpStatus,
   Param,
   Post,
+  Put,
   Query,
 } from '@nestjs/common';
 import { Auth } from 'src/common/decorators/Auth.decorator';
@@ -42,7 +43,7 @@ export class CategoryController {
     return await this.categoryService.edit(cateId);
   }
   @HttpCode(HttpStatus.OK)
-  @Get('edit/:cateId')
+  @Put('edit/:cateId')
   async Update(
     @Param('cateId') cateId: string,
     categoryDTO: createCategoryDTO,
