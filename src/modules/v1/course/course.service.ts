@@ -19,6 +19,7 @@ import { SearchCourseQueryDTO } from '../home/dtos/home.dto';
 export class CourseService {
   constructor(
     @InjectModel('Course') private courseModel: PaginateModel<Course>,
+    @InjectModel('Category') private categoryModel: PaginateModel<Course>,
   ) {}
 
   // home panel route
@@ -43,15 +44,6 @@ export class CourseService {
     return await courses.skip(skip).limit(perPage).exec();
   }
 
-  // async searchTitle(text: string) {
-  //   const query = {};
-  //   if (text) {
-  //     query['title'] = new RegExp(text, 'gi');
-  //     const courses = await this.courseModel.find({ ...query });
-  //     return courses;
-  //   }
-  //   return [];
-  // }
   async showNewCoursesInHomePage() {
     const courses = await this.courseModel
       .find()
@@ -90,6 +82,10 @@ export class CourseService {
             path: 'teacher',
           },
           {
+            path: 'category',
+            select: 'title',
+          },
+          {
             path: 'seasons',
             select: 'title',
             populate: [
@@ -109,6 +105,9 @@ export class CourseService {
       pages: courses.pages,
     };
   }
+  async create() {
+    return await this.categoryModel.find({});
+  }
   async store(courseDTO: CreateCourseDTO) {
     const {
       title,
@@ -119,6 +118,7 @@ export class CourseService {
       fromColor,
       toColor,
       tags,
+      category,
       user,
       type,
       price,
@@ -132,6 +132,7 @@ export class CourseService {
     const newCourse = new this.courseModel({
       teacher: user.id,
       title,
+      category,
       gradientColorCard: {
         fromColor,
         toColor,
@@ -151,7 +152,9 @@ export class CourseService {
     if (!isMongoId(courseID))
       throw new BadRequestException('the CourseId not true');
 
-    const course = await this.courseModel.findById(courseID);
+    const course = await this.courseModel
+      .findById(courseID)
+      .populate('category');
 
     if (!course) throw new NotFoundException('The course not founded');
 
@@ -161,6 +164,7 @@ export class CourseService {
     const {
       user,
       title,
+      category,
       body,
       description,
       fromColor,
@@ -188,6 +192,7 @@ export class CourseService {
         title,
         slug: slugify(title, '-'),
         body,
+        category,
         type,
         gradientColorCard: {
           toColor,

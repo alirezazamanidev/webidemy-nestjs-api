@@ -2,6 +2,8 @@ import { IsNotEmpty } from 'class-validator';
 import { User } from 'src/common/interfaces/user.interface';
 export class CreateCourseDTO {
   @IsNotEmpty()
+  category: string;
+  @IsNotEmpty()
   user: User;
   @IsNotEmpty()
   title: string;
@@ -28,6 +30,9 @@ export class CreateCourseDTO {
 export class UpdateCourseDTO {
   @IsNotEmpty()
   user: User;
+  @IsNotEmpty()
+  category: string;
+
   @IsNotEmpty()
   title: string;
   @IsNotEmpty()
