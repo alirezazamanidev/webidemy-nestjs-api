@@ -12,6 +12,8 @@ async function bootstrap() {
   app.enableVersioning({
     type: VersioningType.URI,
   });
+
+  //add cookie parser
   app.use(cookieParser());
   app.useGlobalFilters(...getGlobalFilters(httpAdapter));
   app.useStaticAssets('public');
