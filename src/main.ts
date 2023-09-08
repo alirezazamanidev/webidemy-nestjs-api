@@ -11,7 +11,8 @@ async function bootstrap() {
   const httpAdapter = app.get(HttpAdapterHost);
   app.enableVersioning({
     type: VersioningType.URI,
-  });
+  }); 
+  
   app.use(cookieParser());
   // app.useGlobalFilters(...getGlobalFilters(httpAdapter));
   app.useStaticAssets('public');
