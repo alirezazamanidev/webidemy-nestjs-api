@@ -5,6 +5,7 @@ import {
   HttpCode,
   HttpStatus,
   Post,
+  Req,
   Request,
   UseGuards,
 } from '@nestjs/common';
@@ -53,5 +54,11 @@ export class AuthController {
   ) {
     const tokens = await this.authService.RefreshToken(userId, refreshToken);
     return tokens;
+  }
+  @Auth()
+  @HttpCode(HttpStatus.OK)
+  @Get('local/signOut')
+  async logout(@Req() req) {
+    return await this.authService.signOut(req?.user?.id);
   }
 }

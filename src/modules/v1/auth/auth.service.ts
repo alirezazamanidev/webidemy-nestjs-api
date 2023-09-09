@@ -37,6 +37,7 @@ export class AuthService {
     const jwtPayload: JwtPayload = {
       id: user.id,
       fullname: user.fullname,
+      avatar: user.avatar,
       username: user.username,
       phone: user.phone,
       email: user.email,
@@ -71,5 +72,15 @@ export class AuthService {
     const tokens = await this.createTokens(user);
     await this.userService.updateHashRt(user.id, tokens.refresh_token);
     return tokens;
+  }
+  async signOut(userId: string) {
+    const user = await this.userService.findById(userId);
+
+    await user.updateOne({ $set: { hashRt: '', active: false } });
+
+    return {
+      status: 'success',
+      message: 'the User Logouted!',
+    };
   }
 }

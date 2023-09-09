@@ -4,7 +4,7 @@ export type JwtPayload = {
   fullname: string;
   phone: string;
   email: string;
-
+  avatar?: string;
   active: boolean;
   admin: boolean;
 };

@@ -72,7 +72,7 @@ export class CourseService {
       },
     ]);
 
-    if (!course) throw new BadRequestException('the course not found!');
+    if (!course) throw new NotFoundException('the course not found!');
     return course;
   }
 

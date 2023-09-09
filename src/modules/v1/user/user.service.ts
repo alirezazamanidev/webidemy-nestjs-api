@@ -4,9 +4,10 @@ import {
   InternalServerErrorException,
   NotFoundException,
 } from '@nestjs/common';
+import * as crypto from 'crypto';
 import * as fs from 'fs';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model, PaginateModel } from 'mongoose';
+import { PaginateModel } from 'mongoose';
 import { User } from 'src/common/interfaces/user.interface';
 import { RegisterDTO } from '../auth/dtos/auth.dto';
 import { Messages } from 'src/common/enums/message.enum';
@@ -72,7 +73,7 @@ export class UserService {
     const newUser = new this.userModel({
       phone,
       fullname,
-      username: slugify(fullname, '-'),
+      username: `@${slugify(fullname, '-')}-${crypto.randomInt(1000, 9999)}`,
     });
     try {
       const savedUser = await newUser.save();
@@ -91,7 +92,31 @@ export class UserService {
     await user.updateOne({ $set: { hashRt: hashRt } });
   }
   async findById(userId: string) {
+    if (!isMongoId(userId))
+      throw new BadRequestException('The user Id is not true');
     const user = await this.userModel.findById(userId);
+    if (!user) throw new NotFoundException('The user not found!');
+    return user;
+  }
+  async uploadAvatar(userId: string, file: Express.Multer.File) {
+    const user = await this.findById(userId);
+    const avatarUrl = this.getUrlImage(`${file.destination}/${file.filename}`);
+
+    if (user?.avatar) {
+      fs.unlinkSync(`./public/${user?.avatar}`);
+    }
+    await user.updateOne({ $set: { avatar: avatarUrl } });
+    return {
+      status: 'success',
+    };
+  }
+  private getUrlImage(dir: string) {
+    return dir.substring(8);
+  }
+
+  async findByUsername(username: string) {
+    const user = await this.userModel.findOne({ username });
+    if (!user) throw new NotFoundException('The user not found!');
     return user;
   }
 }
