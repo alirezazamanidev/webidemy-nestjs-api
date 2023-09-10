@@ -15,6 +15,7 @@ import slugify from 'slugify';
 import * as bcrypt from 'bcrypt';
 import { BasePaginateDTO } from 'src/common/dtos/base-paginate.dto';
 import isMongoId from 'validator/lib/isMongoId';
+import { EditProfileUserDtO } from '../home/dtos/home.dto';
 @Injectable()
 export class UserService {
   constructor(@InjectModel('User') private userModel: PaginateModel<User>) {}
@@ -118,5 +119,23 @@ export class UserService {
     const user = await this.userModel.findOne({ username });
     if (!user) throw new NotFoundException('The user not found!');
     return user;
+  }
+  async editProfile(userDTO: EditProfileUserDtO, userId) {
+    const user = await this.findById(userId);
+    const { fullname, email, username, biography } = userDTO;
+    const userName =
+      user.username.substring(1) === username ? user.username : `@${username}`;
+    await user.updateOne({
+      $set: {
+        fullname,
+        email,
+        biography: biography ? biography : user.biography,
+        username: userName,
+      },
+    });
+
+    return {
+      status: 'success',
+    };
   }
 }

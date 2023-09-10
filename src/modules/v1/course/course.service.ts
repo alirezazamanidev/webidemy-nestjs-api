@@ -37,7 +37,6 @@ export class CourseService {
     const perPage = parseInt(limit) || 8;
     const currentPage = parseInt(page) || 1;
     const skip = (currentPage - 1) * perPage;
-    
 
     if (category && category !== 'all') {
       const cate = await this.categoryModel.findOne({ title: category });
@@ -49,8 +48,13 @@ export class CourseService {
       courses.sort({ createdAt: -1 });
     }
 
-   
-    return await courses.skip(skip).limit(perPage).exec();
+    return await courses
+      .skip(skip)
+      .limit(perPage)
+      .populate({
+        path: 'teacher',
+        select: ['fullname', 'avatar'],
+      }).exec();
   }
 
   async showNewCoursesInHomePage() {

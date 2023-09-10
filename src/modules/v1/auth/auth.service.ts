@@ -38,6 +38,7 @@ export class AuthService {
       id: user.id,
       fullname: user.fullname,
       avatar: user.avatar,
+      biography: user.biography,
       username: user.username,
       phone: user.phone,
       email: user.email,

@@ -1,4 +1,5 @@
 import {
+  Body,
   Controller,
   Get,
   HttpCode,
@@ -11,6 +12,7 @@ import {
 import { UserService } from '../../user/user.service';
 import { Auth } from 'src/common/decorators/Auth.decorator';
 import { UploadAvatarImageFile } from 'src/common/decorators/uploadFile.decorator';
+import { EditProfileUserDtO } from '../dtos/home.dto';
 
 @Controller({
   path: 'users',
@@ -34,5 +36,11 @@ export class UserController {
       fullname: user.fullname,
       username: user.username,
     };
+  }
+  @Auth()
+  @HttpCode(HttpStatus.OK)
+  @Post('edit/profile')
+  async EditProfile(@Req() req, @Body() userDTO: EditProfileUserDtO) {
+    return await this.userService.editProfile(userDTO, req.user.id);
   }
 }

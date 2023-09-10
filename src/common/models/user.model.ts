@@ -10,6 +10,7 @@ export const userSchema = new Schema(
     admin: { type: Boolean, default: false },
     email: { type: String },
     phone: { type: String, required: true },
+    biography: { type: String, defualt: null },
     avatar: { type: String, default: '' },
     hashRt: { type: String, default: null },
   },
