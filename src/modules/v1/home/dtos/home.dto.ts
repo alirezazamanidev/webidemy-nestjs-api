@@ -12,3 +12,10 @@ export class EditProfileUserDtO {
   username: string;
   phone: string;
 }
+
+export class createCommentDTO {
+  user: string;
+  course: string;
+  episode: string;
+  comment: string;
+}
