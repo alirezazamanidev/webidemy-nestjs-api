@@ -105,10 +105,12 @@ export class CommentService {
     };
   }
 
-  async approved(commentDTO: AnswerCommentDTO) {
+  async approved(commentDTO: AnswerCommentDTO, userId: string) {
     const parentComment = await this.findById(commentDTO.parent);
+    console.log(commentDTO.user);
 
     const newComment = new this.commentModel({
+      user: userId,
       parent: parentComment.id,
       comment: commentDTO.comment,
       approved: true,

@@ -8,11 +8,14 @@ import {
   Param,
   Post,
   Query,
+  Req,
 } from '@nestjs/common';
 import { BasePaginateDTO } from 'src/common/dtos/base-paginate.dto';
 import { CommentService } from '../../comment/comment.service';
 import { AnswerCommentDTO } from '../../home/dtos/home.dto';
+import { Auth } from 'src/common/decorators/Auth.decorator';
 
+@Auth()
 @Controller({
   path: '/admin/comments',
   version: '1',
@@ -28,8 +31,8 @@ export class CommentController {
   }
   @HttpCode(HttpStatus.OK)
   @Post('/approved')
-  async Approved(@Body() commentDTO: AnswerCommentDTO) {
-    return this.commentService.approved(commentDTO);
+  async Approved(@Body() commentDTO: AnswerCommentDTO, @Req() req) {
+    return this.commentService.approved(commentDTO, req.user.id);
   }
   @HttpCode(HttpStatus.OK)
   @Get()
