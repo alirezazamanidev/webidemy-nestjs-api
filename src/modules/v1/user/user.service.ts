@@ -40,10 +40,7 @@ export class UserService {
   }
 
   async destroy(userId: string) {
-    if (!isMongoId(userId))
-      throw new BadRequestException('The user id is not true');
-    const user = await this.userModel.findById(userId);
-    if (!user) throw new NotFoundException('The user not found');
+    const user = await this.findById(userId);
     if (user.avatar) {
       fs.unlinkSync(`./public/${user.avatar}`);
     }

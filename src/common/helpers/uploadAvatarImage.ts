@@ -12,7 +12,8 @@ const getUrlImage = () => {
 export const AvatarImageStorage = multer.diskStorage({
   destination: (req, file, cb) => {
     const dir = getUrlImage();
-    mkdirp(dir).then((err: any) => cb(err, dir));
+
+    mkdirp(dir, () => cb(null, dir));
   },
   filename: (req, file, cb) => {
     const filePath = getUrlImage() + '/' + file.originalname;

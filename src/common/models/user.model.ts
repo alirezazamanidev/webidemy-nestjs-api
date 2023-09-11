@@ -11,7 +11,7 @@ export const userSchema = new Schema(
     email: { type: String },
     phone: { type: String, required: true },
     biography: { type: String, defualt: null },
-    avatar: { type: String, default: '' },
+    avatar: { type: String, default: undefined },
     hashRt: { type: String, default: null },
   },
   { timestamps: true },
