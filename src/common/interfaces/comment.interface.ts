@@ -11,5 +11,7 @@ export interface Comment extends Document {
   episode?: Episode;
   course?: Course;
   comment: string;
-  createdAt: string;
+  comments: Comment[];
+  createdAt: Date;
+  updatedAt: Date;
 }

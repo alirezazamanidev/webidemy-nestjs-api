@@ -9,6 +9,8 @@ import { UserController } from './controllers/user.controller';
 import { UserModule } from '../user/user.module';
 import { CategoryController } from './controllers/category.controller';
 import { CategoryModule } from '../category/category.module';
+import { CommentController } from './controllers/comment.controller';
+import { CommentModule } from '../comment/comment.module';
 
 @Module({
   imports: [
@@ -16,6 +18,7 @@ import { CategoryModule } from '../category/category.module';
     SeasonModule,
     EpisodeModule,
     UserModule,
+    CommentModule,
     CategoryModule,
   ],
   controllers: [
@@ -24,6 +27,7 @@ import { CategoryModule } from '../category/category.module';
     EpisodeController,
     UserController,
     CategoryController,
+    CommentController,
   ],
 })
 export class AdminModule {}

@@ -19,3 +19,10 @@ export class createCommentDTO {
   episode: string;
   comment: string;
 }
+export class AnswerCommentDTO {
+  user: string;
+  course: string;
+  episode: string;
+  comment: string;
+  parent: string;
+}

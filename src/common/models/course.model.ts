@@ -32,4 +32,10 @@ courseSchema.virtual('seasons', {
   localField: '_id',
   foreignField: 'course',
 });
+
+courseSchema.virtual('comments', {
+  ref: 'Comment',
+  localField: '_id',
+  foreignField: 'course',
+});
 export { courseSchema };

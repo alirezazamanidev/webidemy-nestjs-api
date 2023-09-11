@@ -2,6 +2,7 @@ import { Document } from 'mongoose';
 import { User } from './user.interface';
 import { SeasonCourse } from './season.interface';
 import { Category } from './category.interface';
+import { Comment } from './comment.interface';
 export interface Course extends Document {
   category: Category;
   id: string;
@@ -20,7 +21,7 @@ export interface Course extends Document {
     fromColor: string;
     toColor: string;
   };
-
+  comments: Comment[];
   viewCount: number;
   commentCount: number;
   time: string;

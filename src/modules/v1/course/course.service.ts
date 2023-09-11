@@ -54,7 +54,8 @@ export class CourseService {
       .populate({
         path: 'teacher',
         select: ['fullname', 'avatar'],
-      }).exec();
+      })
+      .exec();
   }
 
   async showNewCoursesInHomePage() {
@@ -69,12 +70,44 @@ export class CourseService {
     return courses;
   }
   async singleCourseBySlug(slug: string) {
-    const course = await this.courseModel.findOne({ slug }).populate([
-      {
-        path: 'seasons',
-        populate: ['episodes'],
-      },
-    ]);
+    const course = await this.courseModel
+      .findOne({ slug })
+      .populate([
+        {
+          path: 'seasons',
+          populate: ['episodes'],
+        },
+      ])
+      .populate([
+        {
+          path: 'comments',
+          options: {
+            sort: { createdAt: -1 },
+            limit: 10,
+          },
+
+          match: {
+            parent: null,
+            approved: true,
+          },
+          populate: [
+            {
+              path: 'user',
+              select: ['fullname', 'username', 'avatar'],
+            },
+            {
+              path: 'comments',
+              match: {
+                approved: true,
+              },
+              populate: {
+                path: 'user',
+                select: ['fullname', 'username', 'avatar'],
+              },
+            },
+          ],
+        },
+      ]);
 
     if (!course) throw new NotFoundException('the course not found!');
     return course;

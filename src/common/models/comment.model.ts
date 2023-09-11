@@ -19,4 +19,9 @@ const commentSchema = new Schema(
 );
 commentSchema.plugin(mongoosePaginate);
 
+commentSchema.virtual('comments', {
+  ref: 'Comment',
+  localField: '_id',
+  foreignField: 'parent',
+});
 export { commentSchema };
