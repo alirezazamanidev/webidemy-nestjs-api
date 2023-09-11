@@ -74,6 +74,14 @@ export class CourseService {
       .findOne({ slug })
       .populate([
         {
+          path: 'category',
+          select: 'title',
+        },
+        {
+          path: 'teacher',
+          select: ['fullname', 'avatar', 'biography'],
+        },
+        {
           path: 'seasons',
           populate: ['episodes'],
         },

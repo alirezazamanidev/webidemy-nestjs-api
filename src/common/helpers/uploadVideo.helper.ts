@@ -13,7 +13,7 @@ const getUrlVideo = () => {
 export const videoStorage = multer.diskStorage({
   destination: (req, file, cb) => {
     const dir = getUrlVideo();
-    mkdirp(dir).then((err: any) => cb(err, dir));
+    mkdirp(dir, () => cb(null, dir));
   },
   filename: (req, file, cb) => {
     const filePath = getUrlVideo() + '/' + file.originalname;
