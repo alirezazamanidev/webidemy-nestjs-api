@@ -26,3 +26,11 @@ export class AnswerCommentDTO {
   comment: string;
   parent: string;
 }
+export class CommentDTO {
+  subject: {
+    course?: string;
+    episode?: string;
+  };
+  page: number;
+  limit: number;
+}

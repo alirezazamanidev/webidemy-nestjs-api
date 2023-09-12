@@ -23,6 +23,19 @@ export class CourseService {
     @InjectModel('Category') private categoryModel: PaginateModel<Category>,
   ) {}
 
+  async findById(courseId: string) {
+    if (!isMongoId(courseId))
+      throw new BadRequestException('the CourseId not true');
+
+    const course = await this.courseModel
+      .findById(courseId)
+      .populate('category');
+
+    if (!course) throw new NotFoundException('The course not founded');
+
+    return course;
+  }
+
   // home panel route
 
   async filter(queryFilter: SearchCourseQueryDTO) {
@@ -70,52 +83,20 @@ export class CourseService {
     return courses;
   }
   async singleCourseBySlug(slug: string) {
-    const course = await this.courseModel
-      .findOne({ slug })
-      .populate([
-        {
-          path: 'category',
-          select: 'title',
-        },
-        {
-          path: 'teacher',
-          select: ['fullname', 'avatar', 'biography'],
-        },
-        {
-          path: 'seasons',
-          populate: ['episodes'],
-        },
-      ])
-      .populate([
-        {
-          path: 'comments',
-          options: {
-            sort: { createdAt: -1 },
-            limit: 10,
-          },
-
-          match: {
-            parent: null,
-            approved: true,
-          },
-          populate: [
-            {
-              path: 'user',
-              select: ['fullname', 'username', 'avatar'],
-            },
-            {
-              path: 'comments',
-              match: {
-                approved: true,
-              },
-              populate: {
-                path: 'user',
-                select: ['fullname', 'username', 'avatar'],
-              },
-            },
-          ],
-        },
-      ]);
+    const course = await this.courseModel.findOne({ slug }).populate([
+      {
+        path: 'category',
+        select: 'title',
+      },
+      {
+        path: 'teacher',
+        select: ['fullname', 'avatar', 'biography'],
+      },
+      {
+        path: 'seasons',
+        populate: ['episodes'],
+      },
+    ]);
 
     if (!course) throw new NotFoundException('the course not found!');
     return course;
@@ -203,15 +184,7 @@ export class CourseService {
     return await newCourse.save();
   }
   async EditOneCourse(courseID: string) {
-    if (!isMongoId(courseID))
-      throw new BadRequestException('the CourseId not true');
-
-    const course = await this.courseModel
-      .findById(courseID)
-      .populate('category');
-
-    if (!course) throw new NotFoundException('The course not founded');
-
+    const course = await this.findById(courseID);
     return course;
   }
   async updateOneCourse(courseId: string, courseDTO: UpdateCourseDTO) {
@@ -228,9 +201,7 @@ export class CourseService {
       price,
       file,
     } = courseDTO;
-    if (!isMongoId(courseId))
-      throw new BadRequestException('The course Id is Not True!');
-    const course = await this.courseModel.findById(courseId);
+    const course = await this.findById(courseId);
     const objectforUpdate = {};
     if (file) {
       Object.values(course.photos).forEach((image) =>
@@ -266,7 +237,8 @@ export class CourseService {
   async destroy(courseId: string) {
     if (!isMongoId(courseId))
       throw new BadRequestException('The CourseId Is not true!');
-    const course = await this.courseModel.findById(courseId).populate([
+    const course = await this.findById(courseId);
+    course.populate([
       {
         path: 'seasons',
         populate: ['episodes'],
