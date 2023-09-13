@@ -50,13 +50,13 @@ export class AuthService {
     const [at, rt] = await Promise.all([
       this.jwtService.sign(jwtPayload, {
         secret: process.env.ACCESS_TOKEN_SECRET_KEY,
-        expiresIn: '20d',
+        expiresIn: '5m',
       }),
       this.jwtService.sign(
         { id: user.id },
         {
           secret: process.env.REFRESH_TOKEN_SECRET_KEY,
-          expiresIn: '7d',
+          expiresIn: '10d',
         },
       ),
     ]);

@@ -47,7 +47,7 @@ export class AuthController {
 
   @HttpCode(HttpStatus.OK)
   @UseGuards(AuthGuard('jwt-refresh'))
-  @Post('/refresh')
+  @Get('/refresh')
   async RefreshTokens(
     @GetCurrentUserId() userId: string,
     @GetCurrentUser('refresh_token') refreshToken: string,
