@@ -34,3 +34,7 @@ export class CommentDTO {
   page: number;
   limit: number;
 }
+export class StoreOrder {
+  user: string;
+  course: string;
+}
