@@ -32,7 +32,9 @@ courseSchema.virtual('seasons', {
   localField: '_id',
   foreignField: 'course',
 });
-
+courseSchema.methods.inc = async function (filed: string, num: number = 1) {
+  this[filed] += num;
+};
 courseSchema.virtual('comments', {
   ref: 'Comment',
   localField: '_id',

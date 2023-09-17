@@ -55,7 +55,7 @@ export class UserService {
     const user = await this.userModel.findById(userId);
     if (!user) throw new NotFoundException('The user not found');
 
-    await user.updateOne({ $set: { admin: !user.admin } });
+    await user.updateOne({ $set: { admin: !user.isAdmin } });
 
     return {
       status: 'success',

@@ -1,5 +1,10 @@
 import { IsNotEmpty } from 'class-validator';
 import { User } from 'src/common/interfaces/user.interface';
+
+export class LoginUserAdminDTO {
+  email: string;
+  adminPassword: string;
+}
 export class CreateCourseDTO {
   @IsNotEmpty()
   category: string;

@@ -1,7 +1,7 @@
 import { Document } from 'mongoose';
 import { SeasonCourse } from './season.interface';
 
-export interface Episode extends Document {
+export class Episode extends Document {
   id: string;
   season: SeasonCourse;
   title: string;
@@ -10,6 +10,8 @@ export interface Episode extends Document {
   slug: string;
   type: string;
   time: string;
+  inc: (filed: string, num?: number) => void;
+
   number: number;
   downloadCount: number;
 }

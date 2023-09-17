@@ -1,15 +1,18 @@
 import { Document } from 'mongoose';
 
-export interface User extends Document {
+export class User extends Document {
   id: string;
   fullname: string;
   username?: string;
   phone: string;
+  adminPassword?: string;
   active: boolean;
-  admin: boolean;
+  isAdmin: boolean;
   avatar: string;
+  role: string;
   biography: string;
   email: string;
+  compareAdminPassword: (pass: string) => boolean;
   hashRt: string;
   createdAt: Date;
   updatedAt: Date;

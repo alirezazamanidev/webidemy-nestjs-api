@@ -18,7 +18,9 @@ const episodeSchema = new Schema(
   { timestamps: true },
 );
 episodeSchema.plugin(mongoosePaginate);
-
+episodeSchema.methods.inc = async function (filed: string, num: number = 1) {
+  this[filed] += num;
+};
 // episodeSchema.methods.download = function (user: User) {
 //   if (!user) return '#';
 //   let status = false;

@@ -33,7 +33,7 @@ export class AuthService {
     return tokens;
   }
 
-  private async createTokens(user: User): Promise<Tokens> {
+  async createTokens(user: User): Promise<Tokens> {
     const jwtPayload: JwtPayload = {
       id: user.id,
       fullname: user.fullname,
@@ -43,8 +43,8 @@ export class AuthService {
       phone: user.phone,
       email: user.email,
       active: user.active,
-
-      admin: user.admin,
+      role: user.role,
+      isAdmin: user.isAdmin,
     };
 
     const [at, rt] = await Promise.all([

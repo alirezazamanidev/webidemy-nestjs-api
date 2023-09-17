@@ -24,4 +24,14 @@ commentSchema.virtual('comments', {
   localField: '_id',
   foreignField: 'parent',
 });
+const commentbelong = (doc) => {
+  if (doc.course) return 'Course';
+  else if (doc.episode) return 'Episode';
+};
+commentSchema.virtual('belongTo', {
+  ref: commentbelong,
+  localField: (doc) => commentbelong(doc).toLowerCase(),
+  foreignField: '_id',
+  justOne: true,
+});
 export { commentSchema };

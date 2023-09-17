@@ -10,6 +10,7 @@ export interface Comment extends Document {
   approved: boolean;
   episode?: Episode;
   course?: Course;
+  belongTo: Course | Episode;
   comment: string;
   comments: Comment[];
   createdAt: Date;

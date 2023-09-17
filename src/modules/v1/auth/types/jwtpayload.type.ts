@@ -6,6 +6,7 @@ export type JwtPayload = {
   email: string;
   biography: string;
   avatar?: string;
+  role: string;
   active: boolean;
-  admin: boolean;
+  isAdmin: boolean;
 };

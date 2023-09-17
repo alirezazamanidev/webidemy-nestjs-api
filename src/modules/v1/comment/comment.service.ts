@@ -121,6 +121,7 @@ export class CommentService {
     });
     await newComment.save();
     await parentComment.updateOne({ $set: { approved: true } });
+
     return {
       status: 'success',
     };
