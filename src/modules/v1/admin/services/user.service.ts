@@ -1,4 +1,5 @@
 import {
+  BadRequestException,
   ForbiddenException,
   Injectable,
   NotFoundException,
@@ -10,12 +11,21 @@ import { LoginUserAdminDTO } from '../dto/admin.dto';
 import { AuthService } from '../../auth/auth.service';
 import * as bcrypt from 'bcrypt';
 import { BasePaginateDTO } from 'src/common/dtos/base-paginate.dto';
+import isMongoId from 'validator/lib/isMongoId';
+import * as fs from 'fs';
 @Injectable()
 export class UserService {
   constructor(
     @InjectModel('User') private userModel: PaginateModel<User>,
     private authService: AuthService,
   ) {}
+  async findById(userId: string) {
+    if (!isMongoId(userId))
+      throw new BadRequestException('The user Id is not true');
+    const user = await this.userModel.findById(userId);
+    if (!user) throw new NotFoundException('The user not found!');
+    return user;
+  }
 
   async login(userDTO: LoginUserAdminDTO) {
     const { email, adminPassword } = userDTO;
@@ -52,6 +62,28 @@ export class UserService {
       limit: users.limit,
       page: users.page,
       pages: users.pages,
+    };
+  }
+
+  async updateAdmin(userId: string) {
+    const user = await this.findById(userId);
+
+    await user.updateOne({ $set: { isAdmin: !user.isAdmin } });
+
+    return {
+      status: 'success',
+    };
+  }
+
+  async destroy(userId: string) {
+    const user = await this.findById(userId);
+    if (user.avatar) {
+      fs.unlinkSync(`./public/${user?.avatar}`);
+    }
+    user.deleteOne();
+
+    return {
+      status: 'success',
     };
   }
 }

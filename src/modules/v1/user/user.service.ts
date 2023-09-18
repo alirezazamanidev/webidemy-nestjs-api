@@ -38,6 +38,13 @@ export class UserService {
       pages: courses.pages,
     };
   }
+  async findById(userId: string) {
+    if (!isMongoId(userId))
+      throw new BadRequestException('The user Id is not true');
+    const user = await this.userModel.findById(userId);
+    if (!user) throw new NotFoundException('The user not found!');
+    return user;
+  }
 
   async destroy(userId: string) {
     const user = await this.findById(userId);
@@ -89,13 +96,7 @@ export class UserService {
     if (!user) throw new NotFoundException('The user not founded!');
     await user.updateOne({ $set: { hashRt: hashRt } });
   }
-  async findById(userId: string) {
-    if (!isMongoId(userId))
-      throw new BadRequestException('The user Id is not true');
-    const user = await this.userModel.findById(userId);
-    if (!user) throw new NotFoundException('The user not found!');
-    return user;
-  }
+
   async uploadAvatar(userId: string, file: Express.Multer.File) {
     const user = await this.findById(userId);
     const avatarUrl = this.getUrlImage(`${file.destination}/${file.filename}`);

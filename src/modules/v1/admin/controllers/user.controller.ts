@@ -1,10 +1,13 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   HttpCode,
   HttpStatus,
+  Param,
   Post,
+  Put,
   Query,
   Res,
   UseGuards,
@@ -36,7 +39,6 @@ export class UserController {
   @Auth()
   @Get()
   async GetAllUser(@Query() BasePaginateDTO: BasePaginateDTO) {
-
     return await this.userService.findAll(BasePaginateDTO);
   }
   // @HttpCode(HttpStatus.OK)
@@ -44,16 +46,20 @@ export class UserController {
   // async Index(@Query() BasePaginateDTO: BasePaginateDTO) {
   //   return await this.userService.ShowUsersInadminPanel(BasePaginateDTO);
   // }
-  // @Auth()
-  // @HttpCode(HttpStatus.OK)
-  // @Delete(':userId')
-  // async deleteOne(@Param('userId') userId: string) {
-  //   return await this.userService.destroy(userId);
-  // }
-  // @Auth()
-  // @HttpCode(HttpStatus.OK)
-  // @Put(':userId')
-  // async ToggleAdmin(@Param('userId') userId: string) {
-  //   return await this.userService.toggleAdmin(userId);
-  // }
+  @HttpCode(HttpStatus.OK)
+  @CheckAbilities({ action: Action.Delete, subjects: User })
+  @UseGuards(AbilityGuard)
+  @Auth()
+  @Delete(':userId')
+  async deleteOne(@Param('userId') userId: string) {
+    return await this.userService.destroy(userId);
+  }
+  @HttpCode(HttpStatus.OK)
+  @CheckAbilities({ action: Action.Update, subjects: User })
+  @UseGuards(AbilityGuard)
+  @Auth()
+  @Put(':userId')
+  async ToggleAdmin(@Param('userId') userId: string) {
+    return await this.userService.updateAdmin(userId);
+  }
 }
