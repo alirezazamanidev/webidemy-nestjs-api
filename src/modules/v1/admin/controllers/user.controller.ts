@@ -41,11 +41,22 @@ export class UserController {
   async GetAllUser(@Query() BasePaginateDTO: BasePaginateDTO) {
     return await this.userService.findAll(BasePaginateDTO);
   }
-  // @HttpCode(HttpStatus.OK)
-  // @Get()
-  // async Index(@Query() BasePaginateDTO: BasePaginateDTO) {
-  //   return await this.userService.ShowUsersInadminPanel(BasePaginateDTO);
-  // }
+  @HttpCode(HttpStatus.OK)
+  @CheckAbilities({ action: Action.Read, subjects: User })
+  @UseGuards(AbilityGuard)
+  @Auth()
+  @Get('admin')
+  async GetAdminUsers(@Query() BasePaginateDTO: BasePaginateDTO) {
+    return await this.userService.findAdminUser(BasePaginateDTO);
+  }
+  @HttpCode(HttpStatus.OK)
+  @CheckAbilities({ action: Action.Update, subjects: User })
+  @UseGuards(AbilityGuard)
+  @Auth()
+  @Put('role/:userId')
+  async SetRole(@Param('userId') userId: string, @Body() role: any) {
+    return await this.userService.setRole(userId, role);
+  }
   @HttpCode(HttpStatus.OK)
   @CheckAbilities({ action: Action.Delete, subjects: User })
   @UseGuards(AbilityGuard)

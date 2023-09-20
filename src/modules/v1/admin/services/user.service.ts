@@ -26,6 +26,25 @@ export class UserService {
     if (!user) throw new NotFoundException('The user not found!');
     return user;
   }
+  async findAdminUser(BasePaginateDTO: BasePaginateDTO) {
+    const { page, item_count } = BasePaginateDTO;
+
+    const users = await this.userModel.paginate(
+      { isAdmin: true },
+      {
+        page: page,
+        limit: item_count,
+        sort: { createdAt: -1 },
+      },
+    );
+
+    return {
+      data: users.docs,
+      limit: users.limit,
+      page: users.page,
+      pages: users.pages,
+    };
+  }
 
   async login(userDTO: LoginUserAdminDTO) {
     const { email, adminPassword } = userDTO;
@@ -70,6 +89,13 @@ export class UserService {
 
     await user.updateOne({ $set: { isAdmin: !user.isAdmin } });
 
+    return {
+      status: 'success',
+    };
+  }
+  async setRole(userId: string, roleDTO: any) {
+    const user = await this.findById(userId);
+    await user.updateOne({ $set: { role: roleDTO.role } });
     return {
       status: 'success',
     };
