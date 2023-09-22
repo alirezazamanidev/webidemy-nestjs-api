@@ -65,9 +65,11 @@ export class CourseController {
   // ) {
   //   return await this.courseService.updateOneCourse(courseId, courseDTO);
   // }
-  // @HttpCode(HttpStatus.OK)
-  // @Delete(':courseId')
-  // async deleteCourse(@Param('courseId') courseId: string) {
-  //   return await this.courseService.destroy(courseId);
-  // }
+  @HttpCode(HttpStatus.OK)
+  @CheckAbilities({ action: Action.Delete, subjects: Course })
+  @UseGuards(AbilityGuard)
+  @Delete(':courseId')
+  async deleteCourse(@Param('courseId') courseId: string) {
+    return await this.courseService.destroy(courseId);
+  }
 }

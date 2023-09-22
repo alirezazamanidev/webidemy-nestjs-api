@@ -2,9 +2,6 @@ import {
   AbilityBuilder,
   InferSubjects,
   PureAbility,
-  AbilityClass,
-  ExtractSubjectType,
-  MongoAbility,
   AbilityTuple,
   MatchConditions,
 } from '@casl/ability';
@@ -29,7 +26,9 @@ export class AbilityFactory {
         cannot(Action.Read, User).because('access denied!!');
         can(Action.Read, Course, ({ teacher }) => teacher === user.id);
       } else if (user.role === Role.MANEGER) {
-        can(Action.Manage, 'all');
+        can(Action.Delete, Course);
+        can(Action.Read, Course);
+        cannot(Action.Create, Course);
       }
     }
     return build({ conditionsMatcher: lambdaMatcher });
