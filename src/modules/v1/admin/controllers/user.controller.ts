@@ -21,7 +21,6 @@ import { User } from 'src/common/interfaces/user.interface';
 import { CheckAbilities } from '../../ability/ability.decorators';
 import { AbilityGuard } from '../guards/ability.guard';
 import { BasePaginateDTO } from 'src/common/dtos/base-paginate.dto';
-import { TransformInterceptor } from 'src/common/intercepter/transform.intecepter';
 @Controller({
   path: '/admin/users',
   version: '1',
@@ -54,8 +53,8 @@ export class UserController {
   @UseGuards(AbilityGuard)
   @Auth()
   @Put('role/:userId')
-  async SetRole(@Param('userId') userId: string, @Body() role: any) {
-    return await this.userService.setRole(userId, role);
+  async SetRole(@Param('userId') userId: string, @Body() roleDTO: any) {
+    return await this.userService.setRole(userId, roleDTO);
   }
   @HttpCode(HttpStatus.OK)
   @CheckAbilities({ action: Action.Delete, subjects: User })

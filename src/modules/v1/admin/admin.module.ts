@@ -15,12 +15,15 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { userSchema } from 'src/common/models/user.model';
 import { AuthModule } from '../auth/auth.module';
 import { AbilityModule } from '../ability/ability.module';
-import { APP_GUARD } from '@nestjs/core';
-import { AbilityGuard } from './guards/ability.guard';
+import { CourseService } from './services/course.service';
+import { courseSchema } from 'src/common/models/course.model';
 
 @Module({
   imports: [
-    MongooseModule.forFeature([{ name: 'User', schema: userSchema }]),
+    MongooseModule.forFeature([
+      { name: 'User', schema: userSchema },
+      { name: 'Course', schema: courseSchema },
+    ]),
     CourseModule,
     SeasonModule,
     EpisodeModule,
@@ -37,6 +40,6 @@ import { AbilityGuard } from './guards/ability.guard';
     CategoryController,
     CommentController,
   ],
-  providers: [UserService],
+  providers: [UserService, CourseService],
 })
 export class AdminModule {}

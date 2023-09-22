@@ -49,8 +49,8 @@ export class UserService {
   async login(userDTO: LoginUserAdminDTO) {
     const { email, adminPassword } = userDTO;
     const user = await this.userModel.findOne({ email });
-    // if (!user || !user.compareAdminPassword(adminPassword))
-    //   throw new BadRequestException('کاربری با این مشخصات در سات موجود نیست');
+    if (!user || !user.compareAdminPassword(adminPassword))
+      throw new BadRequestException('کاربری با این مشخصات در سات موجود نیست');
     if (!user.isAdmin)
       throw new ForbiddenException('شما اجازه دسترسی به پنل ادمین را ندارید');
     const tokens = await this.authService.createTokens(user);
@@ -94,8 +94,11 @@ export class UserService {
     };
   }
   async setRole(userId: string, roleDTO: any) {
+    const hashPassword = await bcrypt.hash(roleDTO.adminPassword, 15);
     const user = await this.findById(userId);
-    await user.updateOne({ $set: { role: roleDTO.role } });
+    await user.updateOne({
+      $set: { role: roleDTO.role, adminPassword: hashPassword },
+    });
     return {
       status: 'success',
     };

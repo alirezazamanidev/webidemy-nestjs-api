@@ -4,6 +4,7 @@ import { Category } from './category.interface';
 import { Comment } from './comment.interface';
 export class Course extends Document {
   category: Category;
+  isPublished: boolean;
   id: string;
   teacher: string;
   title: string;

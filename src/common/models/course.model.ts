@@ -4,7 +4,7 @@ const Schema = mongoose.Schema;
 const courseSchema = new Schema(
   {
     category: { type: Schema.Types.ObjectId, ref: 'Category', required: true },
-
+    isPublished: { type: Boolean, default: false },
     teacher: { type: Schema.Types.ObjectId, ref: 'User', required: true },
     title: { type: String, required: true },
     slug: { type: String, required: true },
