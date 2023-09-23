@@ -13,7 +13,6 @@ import { User } from 'src/common/interfaces/user.interface';
 
 export type Subjects = InferSubjects<typeof Course | typeof User> | 'all';
 
-//  type AppAbility = MongoAbility<[Action, Subjects]>;
 export type AppAbility = PureAbility<AbilityTuple, MatchConditions>;
 const lambdaMatcher = (matchConditions: MatchConditions) => matchConditions;
 
@@ -26,6 +25,7 @@ export class AbilityFactory {
         cannot(Action.Read, User).because('access denied!!');
         can(Action.Read, Course, ({ teacher }) => teacher === user.id);
       } else if (user.role === Role.MANEGER) {
+        can(Action.Manage, User);
         can(Action.Delete, Course);
         can(Action.Read, Course);
         cannot(Action.Create, Course);

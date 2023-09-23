@@ -94,4 +94,8 @@ export class CourseService {
       status: 'sucess',
     };
   }
+  async updatePublished(courseId: string) {
+    const course = await this.findById(courseId);
+    await course.updateOne({ $set: { isPublished: !course.isPublished } });
+  }
 }

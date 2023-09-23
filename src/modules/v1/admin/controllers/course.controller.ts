@@ -36,12 +36,12 @@ export class CourseController {
   async Index(@Query() BasePaginateDTO: BasePaginateDTO) {
     return await this.courseService.index(BasePaginateDTO);
   }
-  // @HttpCode(HttpStatus.CREATED)
-  // @Post('create')
-  // @UploadImageFile('photo')
-  // async createCourse(@GetCurrentCourse() courseDTO: CreateCourseDTO) {
-  //   return await this.courseService.store(courseDTO);
-  // }
+  @HttpCode(HttpStatus.OK)
+  @Put('published/:courseId')
+  @CheckAbilities({ action: Action.Update, subjects: Course })
+  async UpdatePublished(@Param('courseId') CourseId: string) {
+    return await this.courseService.updatePublished(CourseId);
+  }
   // @HttpCode(HttpStatus.OK)
   // @Get('/create')
   // async Create() {
