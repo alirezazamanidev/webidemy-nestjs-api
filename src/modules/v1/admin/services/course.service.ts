@@ -209,20 +209,20 @@ export class CourseService {
     if (!course) throw new NotFoundException('the id is not true!');
 
     // delete Images
-    // Object.values(course.photos).forEach((image) =>
-    //   fs.unlinkSync(`./public${image}`),
-    // );
+    Object.values(course.photos).forEach((image) =>
+      fs.unlinkSync(`./public${image}`),
+    );
 
     //delete video episodes and episodes
-    // course.seasons.forEach((season) => {
-    //   season.episodes.forEach((episode) => {
-    //     fs.unlinkSync(`./public/${episode.videoUrl}`);
-    //     episode.deleteOne();
-    //   });
-    // });
+    course.seasons.forEach((season) => {
+      season.episodes.forEach((episode) => {
+        fs.unlinkSync(`./public/${episode.videoUrl}`);
+        episode.deleteOne();
+      });
+    });
 
     // // delete seasons
-    // course.seasons.forEach((season) => season.deleteOne());
+    course.seasons.forEach((season) => season.deleteOne());
     course.deleteOne();
     return {
       status: 'sucess',

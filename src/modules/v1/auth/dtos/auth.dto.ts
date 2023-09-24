@@ -22,3 +22,9 @@ export class LoginDTO {
   })
   phone: string;
 }
+export class ActivationCodeDTO {
+  @IsNotEmpty()
+  token: string;
+  @IsNotEmpty()
+  code: string;
+}

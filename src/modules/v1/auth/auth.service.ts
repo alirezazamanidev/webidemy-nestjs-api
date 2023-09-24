@@ -1,6 +1,9 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
+
 import {
   BadRequestException,
   ForbiddenException,
+  HttpException,
   Injectable,
 } from '@nestjs/common';
 import { LoginDTO, RegisterDTO } from './dtos/auth.dto';
@@ -11,26 +14,66 @@ import { Messages } from 'src/common/enums/message.enum';
 import { JwtPayload } from './types/jwtpayload.type';
 import { Tokens } from './types/Tokens.type';
 import * as bcrypt from 'bcrypt';
+import { ActiveCodeService } from './active-code.service';
 
 @Injectable()
 export class AuthService {
   constructor(
     private userService: UserService,
     private jwtService: JwtService,
+    private ActiveCodeService: ActiveCodeService,
   ) {}
   async SignUp(userDTO: RegisterDTO) {
     const user = await this.userService.create(userDTO);
-    const tokens = await this.createTokens(user);
-    await this.userService.updateHashRt(user?.id, tokens.refresh_token);
-    return tokens;
+    if (user?.active)
+      throw new BadRequestException(Messages.ALREADY_FOR_ACTIVE_USER);
+    const activeCodeList = await this.ActiveCodeService.findActiveCodeForUser();
+    if (activeCodeList.length !== 0) {
+      throw new HttpException(Messages.NOT_EXPIRE_CODE, 203);
+    }
+    const newActiveCode =
+      await this.ActiveCodeService.createActivarionCode(user);
+
+    // Send Sms for phone user
+    console.log({
+      phone: newActiveCode.phone,
+      code: newActiveCode.code,
+    });
+
+    return {
+      message: Messages.SEND_SMS,
+      status: 'success',
+      data: {
+        verifyPhoneToken: newActiveCode.id,
+      },
+    };
   }
 
   async SignIn(userDTO: LoginDTO) {
     const user = await this.userService.findOneByPhone(userDTO?.phone);
     if (!user) throw new BadRequestException(Messages.PHONE_NOT_EXIST);
-    const tokens = await this.createTokens(user);
-    await this.userService.updateHashRt(user?.id, tokens.refresh_token);
-    return tokens;
+    if (user?.active)
+      throw new BadRequestException(Messages.ALREADY_FOR_ACTIVE_USER);
+    const activeCodeList = await this.ActiveCodeService.findActiveCodeForUser();
+    if (activeCodeList.length !== 0) {
+      throw new HttpException(Messages.NOT_EXPIRE_CODE, 203);
+    }
+    const newActiveCode =
+      await this.ActiveCodeService.createActivarionCode(user);
+
+    // Send Sms for phone user
+    console.log({
+      phone: newActiveCode.phone,
+      code: newActiveCode.code,
+    });
+
+    return {
+      message: Messages.SEND_SMS,
+      status: 'success',
+      data: {
+        verifyPhoneToken: newActiveCode.id,
+      },
+    };
   }
 
   async createTokens(user: User): Promise<Tokens> {

@@ -7,4 +7,11 @@ export enum Messages {
   SEASON_HAS_ALREADY = 'فصلی با این عنوان برای دوره مورد نظر ثبت شده است',
   SEASON_NOT_EXIST = 'چنین فصلی وجود ندارد',
   CATEGORY_HAS_EXIST = 'دسته بندی مورد نظر قبلا در سایت ثبت شده است',
+  ALREADY_FOR_ACTIVE_USER = 'اکانت کاربر فعال است',
+  NOT_EXPIRE_CODE = 'کد تایید هنور منثضی نشده است',
+  SEND_SMS = 'کد تایید با موفقیت ارسال شد!',
+  NOT_FOUND_ACTIVITIONCODE = 'کد تایید  مورد نطر وجود ندارد',
+  EXPIRE_ACTIVECODE = 'مهلت اعتبار کد تایید یک بار مصرف به پایان رسیده است',
+  ALREDY_USE_ACTIVECODE = 'کد تایید مورد نظر یک بار استفاده شده است',
+  ALREDY_EXIST_COURSE = 'چنین دوره با این عنوان قبلا در سایت ثبت شده است',
 }
