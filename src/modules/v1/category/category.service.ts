@@ -7,8 +7,6 @@ import { InjectModel } from '@nestjs/mongoose';
 import { PaginateModel } from 'mongoose';
 import { Category } from 'src/common/interfaces/category.interface';
 import { createCategoryDTO } from '../admin/dto/admin.dto';
-import { Messages } from 'src/common/enums/message.enum';
-import { BasePaginateDTO } from 'src/common/dtos/base-paginate.dto';
 import isMongoId from 'validator/lib/isMongoId';
 
 @Injectable()
@@ -17,23 +15,6 @@ export class CategoryService {
     @InjectModel('Category') private categoryModel: PaginateModel<Category>,
   ) {}
 
-  
-
-  async store(categoryDTO: createCategoryDTO) {
-    const { title } = categoryDTO;
-    const category = await this.categoryModel.findOne({ title });
-    if (category) throw new BadRequestException(Messages.CATEGORY_HAS_EXIST);
-
-    const newCategory = new this.categoryModel({
-      title,
-    });
-    await newCategory.save();
-
-    return {
-      status: 'messages',
-      message: 'the Category has been created!',
-    };
-  }
   async edit(cateId: string) {
     if (!isMongoId) throw new BadRequestException('the cate id is not true');
     const cate = await this.categoryModel.findById(cateId);

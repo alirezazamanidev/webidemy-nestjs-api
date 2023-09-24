@@ -9,11 +9,16 @@ import {
   Post,
   Put,
   Query,
+  UseGuards,
 } from '@nestjs/common';
 import { Auth } from 'src/common/decorators/Auth.decorator';
 import { createCategoryDTO } from '../dto/admin.dto';
 import { BasePaginateDTO } from 'src/common/dtos/base-paginate.dto';
 import { CategoryService } from '../services/category.service';
+import { CheckAbilities } from '../../ability/ability.decorators';
+import { Action } from 'src/common/enums/action.enum';
+import { Category } from 'src/common/interfaces/category.interface';
+import { AbilityGuard } from '../guards/ability.guard';
 @Auth()
 @Controller({
   path: '/admin/categories',
@@ -21,12 +26,16 @@ import { CategoryService } from '../services/category.service';
 })
 export class CategoryController {
   constructor(private categoryService: CategoryService) {}
-  // @HttpCode(HttpStatus.CREATED)
-  // @Post('create')
-  // async create(@Body() categoryDTO: createCategoryDTO) {
-  //   return await this.categoryService.store(categoryDTO);
-  // }
+  @HttpCode(HttpStatus.CREATED)
+  @CheckAbilities({ action: Action.Create, subjects: Category })
+  @UseGuards(AbilityGuard)
+  @Post('create')
+  async create(@Body() categoryDTO: createCategoryDTO) {
+    return await this.categoryService.store(categoryDTO);
+  }
   @HttpCode(HttpStatus.OK)
+  @CheckAbilities({ action: Action.Read, subjects: Category })
+  @UseGuards(AbilityGuard)
   @Get()
   async Index(@Query() BasePaginateDTO: BasePaginateDTO) {
     return this.categoryService.index(BasePaginateDTO);

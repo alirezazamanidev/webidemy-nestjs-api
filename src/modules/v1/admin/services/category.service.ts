@@ -1,8 +1,10 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { PaginateModel } from 'mongoose';
 import { BasePaginateDTO } from 'src/common/dtos/base-paginate.dto';
 import { Category } from 'src/common/interfaces/category.interface';
+import { createCategoryDTO } from '../dto/admin.dto';
+import { Messages } from 'src/common/enums/message.enum';
 @Injectable()
 export class CategoryService {
   constructor(
@@ -24,6 +26,22 @@ export class CategoryService {
       limit: categories.limit,
       page: categories.page,
       pages: categories.pages,
+    };
+  }
+
+  async store(categoryDTO: createCategoryDTO) {
+    const { title } = categoryDTO;
+    const category = await this.categoryModel.findOne({ title });
+    if (category) throw new BadRequestException(Messages.CATEGORY_HAS_EXIST);
+
+    const newCategory = new this.categoryModel({
+      title,
+    });
+    await newCategory.save();
+
+    return {
+      status: 'messages',
+      message: 'the Category has been created!',
     };
   }
 }
