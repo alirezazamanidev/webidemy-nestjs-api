@@ -41,12 +41,16 @@ export class CategoryController {
     return this.categoryService.index(BasePaginateDTO);
   }
 
+  @HttpCode(HttpStatus.OK)
+  @CheckAbilities({ action: Action.Delete, subjects: Category })
+  @UseGuards(AbilityGuard)
+  @Delete(':cateId')
+  async Delete(@Param('cateId') cateId: string) {
+    return await this.categoryService.destroy(cateId);
+  }
   // @HttpCode(HttpStatus.OK)
-  // @Delete(':cateId')
-  // async Delete(@Param('cateId') cateId: string) {
-  //   return await this.categoryService.destroy(cateId);
-  // }
-  // @HttpCode(HttpStatus.OK)
+  // @CheckAbilities({ action: Action.Update, subjects: Category })
+  // @UseGuards(AbilityGuard)
   // @Get('edit/:cateId')
   // async Edit(@Param('cateId') cateId: string) {
   //   return await this.categoryService.edit(cateId);

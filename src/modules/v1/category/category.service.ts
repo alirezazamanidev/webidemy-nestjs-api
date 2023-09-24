@@ -33,13 +33,5 @@ export class CategoryService {
       status: 'success',
     };
   }
-  async destroy(cateId: string) {
-    if (!isMongoId) throw new BadRequestException('the cate id is not true');
-    const cate = await this.categoryModel.findById(cateId);
-    if (!cate) throw new NotFoundException('the category is not found!');
-    cate.deleteOne();
-    return {
-      status: 'success',
-    };
-  }
+  
 }
