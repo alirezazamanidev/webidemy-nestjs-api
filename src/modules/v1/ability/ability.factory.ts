@@ -24,6 +24,8 @@ export class AbilityFactory {
       if (user.role === 'teach') {
         cannot(Action.Read, User).because('access denied!!');
         can(Action.Read, Course, ({ teacher }) => teacher === user.id);
+        can(Action.Create, Course);
+
       } else if (user.role === Role.MANEGER) {
         can(Action.Manage, User);
         can(Action.Delete, Course);

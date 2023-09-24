@@ -17,12 +17,14 @@ import { AuthModule } from '../auth/auth.module';
 import { AbilityModule } from '../ability/ability.module';
 import { CourseService } from './services/course.service';
 import { courseSchema } from 'src/common/models/course.model';
+import { categorySchema } from 'src/common/models/category.model';
 
 @Module({
   imports: [
     MongooseModule.forFeature([
       { name: 'User', schema: userSchema },
       { name: 'Course', schema: courseSchema },
+      { name: 'Category', schema: categorySchema },
     ]),
     CourseModule,
     SeasonModule,
