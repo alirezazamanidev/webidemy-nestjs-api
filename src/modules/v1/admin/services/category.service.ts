@@ -63,4 +63,16 @@ export class CategoryService {
       status: 'success',
     };
   }
+  async edit(cateId: string) {
+    const cate = await this.findById(cateId);
+    return cate;
+  }
+  async update(cateId: string, categoryDTO: createCategoryDTO) {
+    const cate = await this.findById(cateId);
+
+    await cate.updateOne({ $set: { ...categoryDTO } });
+    return {
+      status: 'success',
+    };
+  }
 }

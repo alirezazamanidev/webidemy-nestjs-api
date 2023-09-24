@@ -7,7 +7,6 @@ import { EpisodeController } from './controllers/episode.controller';
 import { EpisodeModule } from '../episode/episode.module';
 import { UserController } from './controllers/user.controller';
 import { CategoryController } from './controllers/category.controller';
-import { CategoryModule } from '../category/category.module';
 import { CommentController } from './controllers/comment.controller';
 import { CommentModule } from '../comment/comment.module';
 import { UserService } from './services/user.service';
@@ -33,7 +32,6 @@ import { CategoryService } from './services/category.service';
     AbilityModule,
     AuthModule,
     CommentModule,
-    CategoryModule,
   ],
   controllers: [
     CourseController,

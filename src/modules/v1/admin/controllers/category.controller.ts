@@ -48,19 +48,19 @@ export class CategoryController {
   async Delete(@Param('cateId') cateId: string) {
     return await this.categoryService.destroy(cateId);
   }
-  // @HttpCode(HttpStatus.OK)
-  // @CheckAbilities({ action: Action.Update, subjects: Category })
-  // @UseGuards(AbilityGuard)
-  // @Get('edit/:cateId')
-  // async Edit(@Param('cateId') cateId: string) {
-  //   return await this.categoryService.edit(cateId);
-  // }
-  // @HttpCode(HttpStatus.OK)
-  // @Put('edit/:cateId')
-  // async Update(
-  //   @Param('cateId') cateId: string,
-  //   categoryDTO: createCategoryDTO,
-  // ) {
-  //   return await this.categoryService.update(cateId, categoryDTO);
-  // }
+  @HttpCode(HttpStatus.OK)
+  @CheckAbilities({ action: Action.Update, subjects: Category })
+  @UseGuards(AbilityGuard)
+  @Get('edit/:cateId')
+  async Edit(@Param('cateId') cateId: string) {
+    return await this.categoryService.edit(cateId);
+  }
+  @HttpCode(HttpStatus.OK)
+  @Put('edit/:cateId')
+  async Update(
+    @Param('cateId') cateId: string,
+    @Body() categoryDTO: createCategoryDTO,
+  ) {
+    return await this.categoryService.update(cateId, categoryDTO);
+  }
 }
