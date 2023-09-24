@@ -18,6 +18,7 @@ import { AbilityModule } from '../ability/ability.module';
 import { CourseService } from './services/course.service';
 import { courseSchema } from 'src/common/models/course.model';
 import { categorySchema } from 'src/common/models/category.model';
+import { CategoryService } from './services/category.service';
 
 @Module({
   imports: [
@@ -42,6 +43,6 @@ import { categorySchema } from 'src/common/models/category.model';
     CategoryController,
     CommentController,
   ],
-  providers: [UserService, CourseService],
+  providers: [UserService, CourseService, CategoryService],
 })
 export class AdminModule {}

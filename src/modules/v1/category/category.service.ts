@@ -17,24 +17,7 @@ export class CategoryService {
     @InjectModel('Category') private categoryModel: PaginateModel<Category>,
   ) {}
 
-  async showCategoriesInAdminPanel(BasePaginateDTO: BasePaginateDTO) {
-    const { page, item_count } = BasePaginateDTO;
-    const categories = await this.categoryModel.paginate(
-      {},
-      {
-        page,
-        limit: item_count,
-        sort: { createdAt: -1 },
-      },
-    );
-
-    return {
-      data: categories.docs,
-      limit: categories.limit,
-      page: categories.page,
-      pages: categories.pages,
-    };
-  }
+  
 
   async store(categoryDTO: createCategoryDTO) {
     const { title } = categoryDTO;

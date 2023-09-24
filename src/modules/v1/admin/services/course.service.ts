@@ -14,11 +14,12 @@ import * as fs from 'fs';
 import slugify from 'slugify';
 import { Messages } from 'src/common/enums/message.enum';
 import { CreateCourseDTO, UpdateCourseDTO } from '../dto/admin.dto';
+import { Category } from 'src/common/interfaces/category.interface';
 @Injectable()
 export class CourseService {
   constructor(
     @InjectModel('Course') private courseModel: PaginateModel<Course>,
-    @InjectModel('Category') private categoryModel: PaginateModel<Course>,
+    @InjectModel('Category') private categoryModel: PaginateModel<Category>,
   ) {}
   async findById(courseId: string) {
     if (!isMongoId(courseId))

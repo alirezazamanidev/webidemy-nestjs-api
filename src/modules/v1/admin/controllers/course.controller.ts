@@ -1,5 +1,4 @@
 import {
-  Body,
   Controller,
   Delete,
   Get,
@@ -46,6 +45,7 @@ export class CourseController {
     @Query() BasePaginateDTO: BasePaginateDTO,
     @User() user: JwtPayload,
   ) {
+
     return await this.courseService.indexMyCourse(BasePaginateDTO, user.id);
   }
   @HttpCode(HttpStatus.OK)

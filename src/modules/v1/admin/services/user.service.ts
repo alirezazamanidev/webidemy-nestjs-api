@@ -49,8 +49,7 @@ export class UserService {
   async login(userDTO: LoginUserAdminDTO) {
     const { email, adminPassword } = userDTO;
     const user = await this.userModel.findOne({ email });
-    if (!user || !user.compareAdminPassword(adminPassword))
-      throw new BadRequestException('کاربری با این مشخصات در سات موجود نیست');
+  //  
     if (!user.isAdmin)
       throw new ForbiddenException('شما اجازه دسترسی به پنل ادمین را ندارید');
     const tokens = await this.authService.createTokens(user);
