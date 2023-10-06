@@ -3,6 +3,7 @@ export enum Messages {
   EMPTY_PHONE_USER = 'شماره تلفن کاربر ارسال نشده است!',
   PHONE_ALREADY_EXIST = 'شماره مورد نظر یک بار در سایت ثبت شده است!',
   PHONE_NOT_EXIST = 'شماره مورد نظر در سایت ثبت نشده است لطفا ابتدا ثبت نام کنید!',
+  USER_INFO_NOT_TRUE = 'اطلاعات وارد شده مطابقت ندارد',
   ALREADY_EXIST_COURSE = 'چنین دوره ای با این عنوان قبلا در سایت ثبت شده است',
   SEASON_HAS_ALREADY = 'فصلی با این عنوان برای دوره مورد نظر ثبت شده است',
   SEASON_NOT_EXIST = 'چنین فصلی وجود ندارد',

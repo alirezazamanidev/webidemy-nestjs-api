@@ -13,6 +13,7 @@ import * as bcrypt from 'bcrypt';
 import { BasePaginateDTO } from 'src/common/dtos/base-paginate.dto';
 import isMongoId from 'validator/lib/isMongoId';
 import * as fs from 'fs';
+import { Messages } from 'src/common/enums/message.enum';
 @Injectable()
 export class UserService {
   constructor(
@@ -49,7 +50,9 @@ export class UserService {
   async login(userDTO: LoginUserAdminDTO) {
     const { email, adminPassword } = userDTO;
     const user = await this.userModel.findOne({ email });
-  //  
+
+    if (!user || !user.compareAdminPassword(adminPassword))
+      throw new BadRequestException(Messages.USER_INFO_NOT_TRUE);
     if (!user.isAdmin)
       throw new ForbiddenException('شما اجازه دسترسی به پنل ادمین را ندارید');
     const tokens = await this.authService.createTokens(user);
