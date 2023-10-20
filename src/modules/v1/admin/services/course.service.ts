@@ -118,8 +118,7 @@ export class CourseService {
       description,
       condition,
       file,
-      fromColor,
-      toColor,
+
       tags,
       category,
       user,
@@ -136,10 +135,7 @@ export class CourseService {
       teacher: user.id,
       title,
       category,
-      gradientColorCard: {
-        fromColor,
-        toColor,
-      },
+
       slug: slugify(title, '-'),
       body,
       condition,

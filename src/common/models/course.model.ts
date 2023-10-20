@@ -16,10 +16,7 @@ const courseSchema = new Schema(
     tags: { type: String, required: true },
 
     price: { type: String, required: true },
-    gradientColorCard: {
-      fromColor: { type: String, required: true },
-      toColor: { type: String, required: true },
-    },
+
     viewCount: { type: Number, default: 0 },
     commentCount: { type: Number, default: 0 },
     time: { type: String, default: '00:00:00' },
