@@ -6,7 +6,7 @@ import {
 import { InjectModel } from '@nestjs/mongoose';
 import { PaginateModel } from 'mongoose';
 import { Course } from 'src/common/interfaces/course.intreface';
-import { CreateCourseDTO, UpdateCourseDTO } from '../admin/dto/admin.dto';
+import { CourseDTO, UpdateCourseDTO } from '../admin/dto/admin.dto';
 
 import isMongoId from 'validator/lib/isMongoId';
 import { BasePaginateDTO } from 'src/common/dtos/base-paginate.dto';

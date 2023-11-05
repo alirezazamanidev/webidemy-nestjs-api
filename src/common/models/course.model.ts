@@ -14,7 +14,11 @@ const courseSchema = new Schema(
     condition: { type: String, required: true },
     photos: { type: Object, required: true },
     tags: { type: String, required: true },
+    GradientCardCourse: {
+      fromColor: { type: String, required: true },
+      toColor: { type: String, required: true },
 
+    },
     price: { type: String, required: true },
 
     viewCount: { type: Number, default: 0 },

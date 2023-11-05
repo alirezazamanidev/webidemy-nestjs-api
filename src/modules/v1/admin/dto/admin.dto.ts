@@ -5,7 +5,7 @@ export class LoginUserAdminDTO {
   email: string;
   adminPassword: string;
 }
-export class CreateCourseDTO {
+export class CourseDTO {
   @IsNotEmpty()
   category: string;
   @IsNotEmpty()
@@ -17,16 +17,15 @@ export class CreateCourseDTO {
   @IsNotEmpty()
   description: string;
   @IsNotEmpty()
+  fromColor:string
+  @IsNotEmpty()
+  toColor:string
+  @IsNotEmpty()
   file: Express.Multer.File;
   @IsNotEmpty()
   condition: string;
   @IsNotEmpty()
   price: string;
-  @IsNotEmpty()
-  fromColor: string;
-  @IsNotEmpty()
-  toColor: string;
-
   @IsNotEmpty()
   tags: string;
   @IsNotEmpty()

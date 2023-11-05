@@ -12,7 +12,7 @@ import {
 } from '@nestjs/common';
 import { UploadImageFile } from 'src/common/decorators/uploadFile.decorator';
 import { GetCurrentCourse } from 'src/common/decorators/get-current-course.decorator';
-import { CreateCourseDTO, UpdateCourseDTO } from '../dto/admin.dto';
+import { CourseDTO, UpdateCourseDTO } from '../dto/admin.dto';
 import { Auth } from 'src/common/decorators/Auth.decorator';
 import { BasePaginateDTO } from 'src/common/dtos/base-paginate.dto';
 import { CheckAbilities } from '../../ability/ability.decorators';
@@ -59,7 +59,7 @@ export class CourseController {
   @CheckAbilities({ action: Action.Create, subjects: Course })
   @UseGuards(AbilityGuard)
   @UploadImageFile('photo')
-  async Store(@GetCurrentCourse() courseDTO: CreateCourseDTO) {
+  async Store(@GetCurrentCourse() courseDTO: CourseDTO) {
     return await this.courseService.store(courseDTO);
   }
   @HttpCode(HttpStatus.OK)

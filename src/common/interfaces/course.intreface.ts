@@ -17,7 +17,10 @@ export class Course extends Document {
   tags: string;
   seasons: SeasonCourse[];
   price: string;
-
+  GradientCardCourse: {
+    fromColor: string;
+    toColor: string;
+  }
   comments: Comment[];
   viewCount: number;
   inc: (filed: string, num?: number) => void;
