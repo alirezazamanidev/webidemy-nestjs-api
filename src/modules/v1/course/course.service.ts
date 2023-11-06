@@ -10,7 +10,6 @@ import { CourseDTO, UpdateCourseDTO } from '../admin/dto/admin.dto';
 
 import isMongoId from 'validator/lib/isMongoId';
 import { BasePaginateDTO } from 'src/common/dtos/base-paginate.dto';
-import { SearchCourseQueryDTO } from '../home/dtos/home.dto';
 import { Category } from 'src/common/interfaces/category.interface';
 @Injectable()
 export class CourseService {
@@ -34,38 +33,38 @@ export class CourseService {
 
   // home panel route
 
-  async filter(queryFilter: SearchCourseQueryDTO) {
-    const query = {};
+  // async filter(queryFilter: SearchCourseQueryDTO) {
+  //   const query = {};
 
-    const { limit, page, search, sort, category } = queryFilter;
+  //   const { limit, page, search, sort, category } = queryFilter;
 
-    if (search) {
-      query['title'] = new RegExp(search, 'gi');
-    }
+  //   if (search) {
+  //     query['title'] = new RegExp(search, 'gi');
+  //   }
 
-    const perPage = parseInt(limit) || 8;
-    const currentPage = parseInt(page) || 1;
-    const skip = (currentPage - 1) * perPage;
+  //   const perPage = parseInt(limit) || 8;
+  //   const currentPage = parseInt(page) || 1;
+  //   const skip = (currentPage - 1) * perPage;
 
-    if (category && category !== 'all') {
-      const cate = await this.categoryModel.findOne({ title: category });
-      if (cate) query['category'] = cate;
-    }
-    const courses = this.courseModel.find({ ...query });
+  //   if (category && category !== 'all') {
+  //     const cate = await this.categoryModel.findOne({ title: category });
+  //     if (cate) query['category'] = cate;
+  //   }
+  //   const courses = this.courseModel.find({ ...query });
 
-    if (sort === 'newest') {
-      courses.sort({ createdAt: -1 });
-    }
+  //   if (sort === 'newest') {
+  //     courses.sort({ createdAt: -1 });
+  //   }
 
-    return await courses
-      .skip(skip)
-      .limit(perPage)
-      .populate({
-        path: 'teacher',
-        select: ['fullname', 'avatar'],
-      })
-      .exec();
-  }
+  //   return await courses
+  //     .skip(skip)
+  //     .limit(perPage)
+  //     .populate({
+  //       path: 'teacher',
+  //       select: ['fullname', 'avatar'],
+  //     })
+  //     .exec();
+  // }
 
   async showNewCoursesInHomePage() {
     const courses = await this.courseModel

@@ -1,4 +1,4 @@
-export class SearchCourseQueryDTO {
+export class FilterQueryDTO {
   sort: string;
   page?: string;
   limit: string;

@@ -7,7 +7,7 @@ import {
   Query,
 } from '@nestjs/common';
 
-import { SearchCourseQueryDTO } from '../dtos/home.dto';
+import { FilterQueryDTO } from '../dtos/home.dto';
 import { CourseService } from '../services/course.service';
 
 @Controller({
@@ -25,11 +25,11 @@ export class CourseController {
       courses: await this.courseService.Index(),
     };
   }
-  // @HttpCode(HttpStatus.OK)
-  // @Get('filter')
-  // async FilterCurse(@Query() query: SearchCourseQueryDTO) {
-  //   return await this.courseService.filter(query);
-  // }
+  @HttpCode(HttpStatus.OK)
+  @Get('filter')
+  async FilterCurse(@Query() query:FilterQueryDTO) {
+    return await this.courseService.findbyFilter(query);
+  }
   // @HttpCode(HttpStatus.OK)
   // @Get('getCategories')
   // async GetCategory() {
