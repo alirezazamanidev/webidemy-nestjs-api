@@ -8,9 +8,13 @@ import { CommentController } from './controllers/comment.controller';
 import { CommentModule } from '../comment/comment.module';
 import { OrderController } from './controllers/order.controller';
 import { OrderModule } from '../order/order.module';
+import { CourseService } from './services/course.service';
+import { MongooseModule } from '@nestjs/mongoose';
+import { courseSchema } from 'src/common/models/course.model';
 
 @Module({
   imports: [
+    MongooseModule.forFeature([{ name: 'Course', schema: courseSchema }]),
     CourseModule,
     EpisodeModule,
     UserModule,
@@ -23,5 +27,6 @@ import { OrderModule } from '../order/order.module';
     CommentController,
     OrderController,
   ],
+  providers: [CourseService],
 })
-export class HomeModule {}
+export class HomeModule { }
