@@ -1,14 +1,15 @@
 import { Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
 import { FilterByInclude } from '@nestjs/core';
 import { InjectModel } from '@nestjs/mongoose';
-import { PaginateModel } from 'mongoose';
+import { Model, PaginateModel } from 'mongoose';
 import { Course } from 'src/common/interfaces/course.intreface';
 import { FilterQueryDTO } from '../dtos/home.dto';
+import { Category } from 'src/common/interfaces/category.interface';
 
 @Injectable()
 export class CourseService {
 
-    constructor(@InjectModel('Course') private courseModel: PaginateModel<Course>) { }
+    constructor(@InjectModel('Course') private courseModel: PaginateModel<Course>, @InjectModel('Category') private categoryModel: Model<Category>) { }
 
     async Index(): Promise<Course[]> {
         try {
@@ -43,20 +44,24 @@ export class CourseService {
     }
 
     async findbyFilter(filterDTO: FilterQueryDTO) {
-        const query={};
+        const query = {};
         const { limit, page, search, sort, category } = filterDTO;
 
-        if(search){
-            query['title']=new RegExp(search,'gi');
+        if (search) {
+            query['title'] = new RegExp(search, 'gi');
         }
-
+    
+        
         const perPage = parseInt(limit) || 8;
         const currentPage = parseInt(page) || 1;
         const skip = (currentPage - 1) * perPage;
-       
-    
+        if (category && category !== 'all') {
+            const cate = await this.categoryModel.findOne({ title: category });
+            if (cate) query['category'] = cate;
+        }
 
-        const courses = this.courseModel.find({...query});
+
+        const courses = this.courseModel.find({ ...query });
 
 
         if (sort === 'newest') {
@@ -79,4 +84,8 @@ export class CourseService {
             pages: skip,
         };
     }
+    async getCategorties() {
+        return await this.categoryModel.find({});
+      }
+    
 }

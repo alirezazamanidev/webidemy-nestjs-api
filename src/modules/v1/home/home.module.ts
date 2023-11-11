@@ -11,10 +11,11 @@ import { OrderModule } from '../order/order.module';
 import { CourseService } from './services/course.service';
 import { MongooseModule } from '@nestjs/mongoose';
 import { courseSchema } from 'src/common/models/course.model';
+import { categorySchema } from 'src/common/models/category.model';
 
 @Module({
   imports: [
-    MongooseModule.forFeature([{ name: 'Course', schema: courseSchema }]),
+    MongooseModule.forFeature([{ name: 'Course', schema: courseSchema }, { name: 'Category', schema: categorySchema }]),
     CourseModule,
     EpisodeModule,
     UserModule,

@@ -135,9 +135,6 @@ export class CourseService {
       pages: courses.pages,
     };
   }
-  async getCategorties() {
-    return await this.categoryModel.find({});
-  }
 
 
 }
