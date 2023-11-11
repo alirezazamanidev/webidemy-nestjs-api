@@ -9,17 +9,17 @@ import {
   Req,
   UploadedFile,
 } from '@nestjs/common';
-import { UserService } from '../../user/user.service';
 import { Auth } from 'src/common/decorators/Auth.decorator';
 import { UploadAvatarImageFile } from 'src/common/decorators/uploadFile.decorator';
 import { EditProfileUserDtO } from '../dtos/home.dto';
+import { UserService } from '../services/user.service';
 
 @Controller({
   path: 'users',
   version: '1',
 })
 export class UserController {
-  constructor(private userService: UserService) {}
+  constructor(private userService:UserService ) {}
 
   @Auth()
   @HttpCode(HttpStatus.OK)

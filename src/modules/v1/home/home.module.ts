@@ -12,10 +12,12 @@ import { CourseService } from './services/course.service';
 import { MongooseModule } from '@nestjs/mongoose';
 import { courseSchema } from 'src/common/models/course.model';
 import { categorySchema } from 'src/common/models/category.model';
+import { UserService } from './services/user.service';
+import { userSchema } from 'src/common/models/user.model';
 
 @Module({
   imports: [
-    MongooseModule.forFeature([{ name: 'Course', schema: courseSchema }, { name: 'Category', schema: categorySchema }]),
+    MongooseModule.forFeature([{ name: 'Course', schema: courseSchema }, { name: "User", schema: userSchema }, { name: 'Category', schema: categorySchema }]),
     CourseModule,
     EpisodeModule,
     UserModule,
@@ -28,6 +30,6 @@ import { categorySchema } from 'src/common/models/category.model';
     CommentController,
     OrderController,
   ],
-  providers: [CourseService],
+  providers: [CourseService, UserService],
 })
 export class HomeModule { }
