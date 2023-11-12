@@ -8,7 +8,7 @@ import { InjectModel } from '@nestjs/mongoose';
 import { PaginateModel } from 'mongoose';
 import { User } from 'src/common/interfaces/user.interface';
 import { LoginUserAdminDTO } from '../dto/admin.dto';
-import { AuthService } from '../../auth/auth.service';
+import { AuthService } from '../../auth/services/auth.service';
 import * as bcrypt from 'bcrypt';
 import { BasePaginateDTO } from 'src/common/dtos/base-paginate.dto';
 import isMongoId from 'validator/lib/isMongoId';

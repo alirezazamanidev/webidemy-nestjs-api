@@ -6,15 +6,16 @@ import {
   HttpException,
   Injectable,
 } from '@nestjs/common';
-import { LoginDTO, RegisterDTO } from './dtos/auth.dto';
-import { UserService } from '../user/user.service';
+import { LoginDTO, RegisterDTO } from '../dtos/auth.dto';
+
 import { User } from 'src/common/interfaces/user.interface';
 import { JwtService } from '@nestjs/jwt';
 import { Messages } from 'src/common/enums/message.enum';
-import { JwtPayload } from './types/jwtpayload.type';
-import { Tokens } from './types/Tokens.type';
+import { JwtPayload } from '../types/jwtpayload.type';
+import { Tokens } from '../types/Tokens.type';
 import * as bcrypt from 'bcrypt';
 import { ActiveCodeService } from './active-code.service';
+import { UserService } from './user.service';
 
 @Injectable()
 export class AuthService {
@@ -27,7 +28,7 @@ export class AuthService {
     const user = await this.userService.create(userDTO);
     if (user?.active)
       throw new BadRequestException(Messages.ALREADY_FOR_ACTIVE_USER);
-    const activeCodeList = await this.ActiveCodeService.findActiveCodeForUser();
+    const activeCodeList = await this.ActiveCodeService.findActiveCodeForUser(user.id);
     if (activeCodeList.length !== 0) {
       throw new HttpException(Messages.NOT_EXPIRE_CODE, 203);
     }
@@ -54,7 +55,7 @@ export class AuthService {
     if (!user) throw new BadRequestException(Messages.PHONE_NOT_EXIST);
     if (user?.active)
       throw new BadRequestException(Messages.ALREADY_FOR_ACTIVE_USER);
-    const activeCodeList = await this.ActiveCodeService.findActiveCodeForUser();
+    const activeCodeList = await this.ActiveCodeService.findActiveCodeForUser(user.id);
     if (activeCodeList.length !== 0) {
       throw new HttpException(Messages.NOT_EXPIRE_CODE, 203);
     }

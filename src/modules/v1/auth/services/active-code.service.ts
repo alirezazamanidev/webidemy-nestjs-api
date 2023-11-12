@@ -3,12 +3,13 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { ActiveCode } from 'src/common/interfaces/activeCode';
 import { User } from 'src/common/interfaces/user.interface';
-import { Tokens } from './types/Tokens.type';
-import { JwtPayload } from './types/jwtpayload.type';
+import { Tokens } from '../types/Tokens.type';
+import { JwtPayload } from '../types/jwtpayload.type';
 import { Messages } from 'src/common/enums/message.enum';
 import { JwtService } from '@nestjs/jwt';
-import { UserService } from '../user/user.service';
-import { ActivationCodeDTO } from './dtos/auth.dto';
+
+import { ActivationCodeDTO } from '../dtos/auth.dto';
+import { UserService } from './user.service';
 
 @Injectable()
 export class ActiveCodeService {
@@ -34,9 +35,9 @@ export class ActiveCodeService {
     }
   }
 
-  async findActiveCodeForUser(): Promise<ActiveCode[]> {
+  async findActiveCodeForUser(userId:string): Promise<ActiveCode[]> {
     return await this.activeCodeModel
-      .find({})
+      .find({user:userId})
       .gt('expire', new Date())
       .sort({ createdAt: 1 })
       .limit(1)

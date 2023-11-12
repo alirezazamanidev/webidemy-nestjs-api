@@ -10,14 +10,14 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { ActivationCodeDTO, LoginDTO, RegisterDTO } from './dtos/auth.dto';
-import { AuthService } from './auth.service';
+import { AuthService } from './services/auth.service';
 import { Auth } from 'src/common/decorators/Auth.decorator';
 import { AuthGuard } from '@nestjs/passport';
 import { GetCurrentUserId } from 'src/common/decorators/get-current-user-id.decorator';
 import { GetCurrentUser } from 'src/common/decorators/get-current-user.decorator';
 import { User } from 'src/common/decorators/User.decorator';
 import { JwtPayload } from './types/jwtpayload.type';
-import { ActiveCodeService } from './active-code.service';
+import { ActiveCodeService } from './services/active-code.service';
 @Controller({
   path: 'auth',
   version: '1',
