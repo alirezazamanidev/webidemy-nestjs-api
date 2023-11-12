@@ -24,6 +24,9 @@ export class CourseService {
     }
     async GetsingleCourseBySlug(courseSlug: string): Promise<Course> {
 
+        // const perPage = parseInt(limit) || 8;
+        // const currentPage = parseInt(page) || 1;
+        // const skip = (currentPage - 1) * perPage; 1 *8
         const course = await this.courseModel.findOne({ slug: courseSlug }).populate([
             {
                 path: 'category',
@@ -37,10 +40,11 @@ export class CourseService {
                 path: 'seasons',
                 populate: ['episodes'],
             },
-        ]);
+        ]).exec();
+      
 
         if (!course) throw new NotFoundException('the course not found!');
-        return course;
+        return course
     }
 
     async findbyFilter(filterDTO: FilterQueryDTO) {
@@ -50,8 +54,8 @@ export class CourseService {
         if (search) {
             query['title'] = new RegExp(search, 'gi');
         }
-    
-        
+
+
         const perPage = parseInt(limit) || 8;
         const currentPage = parseInt(page) || 1;
         const skip = (currentPage - 1) * perPage;
@@ -86,6 +90,6 @@ export class CourseService {
     }
     async getCategorties() {
         return await this.categoryModel.find({});
-      }
-    
+    }
+
 }

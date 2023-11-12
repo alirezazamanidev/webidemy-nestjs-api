@@ -2,7 +2,7 @@ import { Body, Controller, HttpCode, HttpStatus, Post } from '@nestjs/common';
 import { Auth } from 'src/common/decorators/Auth.decorator';
 import { GetCurrentComment } from 'src/common/decorators/get-current-comment.decorator';
 import { CommentDTO, createCommentDTO } from '../dtos/home.dto';
-import { CommentService } from '../../comment/comment.service';
+import { CommentService } from '../services/comment.service';
 
 @Controller({
   path: 'comments',
@@ -14,7 +14,7 @@ export class CommentController {
   @HttpCode(HttpStatus.OK)
   @Post('/create')
   async create(@GetCurrentComment() commentDTO: createCommentDTO) {
-    return this.commentService.comment(commentDTO);
+    return this.commentService.store(commentDTO);
   }
 
   @HttpCode(HttpStatus.OK)
