@@ -1,7 +1,5 @@
 import { Module } from '@nestjs/common';
 import { CourseController } from './controllers/course.controller';
-import { CourseModule } from '../course/course.module';
-import { SeasonModule } from '../season/season.module';
 import { EpisodeController } from './controllers/episode.controller';
 import { EpisodeModule } from '../episode/episode.module';
 import { UserController } from './controllers/user.controller';
@@ -29,7 +27,6 @@ import { SeasonController } from './controllers/season.controller';
       { name: 'Category', schema: categorySchema },
       { name: 'Season', schema: seasonCourseSchema },
     ]),
-    SeasonModule,
     EpisodeModule,
     AbilityModule,
     AuthModule,
@@ -45,4 +42,4 @@ import { SeasonController } from './controllers/season.controller';
   ],
   providers: [UserService, CourseService, CategoryService, SeasonService],
 })
-export class AdminModule {}
+export class AdminModule { }

@@ -1,8 +1,8 @@
-import { BadRequestException, Injectable, InternalServerErrorException } from '@nestjs/common';
+import { BadRequestException, Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model, PaginateModel } from 'mongoose';
 import { SeasonCourse } from 'src/common/interfaces/season.interface';
-import { createSeasonDTO } from '../dto/admin.dto';
+import { EditSeasonDTO, createSeasonDTO } from '../dto/admin.dto';
 import { Messages } from 'src/common/enums/message.enum';
 import { Course } from 'src/common/interfaces/course.intreface';
 import { BasePaginateDTO } from 'src/common/dtos/base-paginate.dto';
@@ -27,12 +27,24 @@ export class SeasonService {
                         path: 'episodes',
                         select: 'title',
                     },
-                    'course',
+                    {
+                        path:'course'
+                    }
                 ],
             },
         );
+
+        
+        
+        let seasonList=sessons.docs.map(season=>{
+            
+            
+           return season.course.teacher.toString() ===user.id && season; 
+        })
+
+
         return {
-            data: sessons.docs,
+            data: seasonList,
             limit: sessons.limit,
             page: sessons.page,
             pages: sessons.pages,
@@ -80,6 +92,31 @@ export class SeasonService {
     
         //delete seasson
         season.deleteOne();
+        return {
+          status: 'success',
+        };
+      }
+      async getOneForEdit(seasonId:string) {
+        if (!isMongoId(seasonId))
+          throw new BadRequestException('The seasonId is not  true');
+        const season = await this.seasonModel.findById(seasonId).populate({
+          path: 'course',
+          select: 'title',
+        });
+        if (!season) throw new NotFoundException('The Season not found');
+    
+        return season;
+      }
+
+      async update(seasonId: string, seasonDTO: EditSeasonDTO) {
+        if (!isMongoId(seasonId))
+          throw new BadRequestException('The season Id is not true!');
+    
+        const season = await this.seasonModel.findById(seasonId);
+        if (!season) throw new NotFoundException('The season is not found');
+    
+        await season.updateOne({ $set: { ...seasonDTO } });
+    
         return {
           status: 'success',
         };
