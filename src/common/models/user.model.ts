@@ -22,12 +22,12 @@ export const userSchema = new Schema(
 userSchema.plugin(mongoosePaginate);
 userSchema.pre('save', function (next) {
   if (!this.adminPassword) return next();
-  const salt = bcrypt.genSaltSync(10);
+  const salt = bcrypt.genSaltSync(15);
   const hash = bcrypt.hashSync(this.adminPassword, salt);
   this.adminPassword = hash;
   next();
 });
 
-userSchema.methods.compareAdminPassword = function (pass) {
+userSchema.methods.compareAdminPassword = function (pass:string) {
   return bcrypt.compareSync(pass, this.adminPassword);
 };

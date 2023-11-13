@@ -1,7 +1,6 @@
 import { Module } from '@nestjs/common';
 import { CourseController } from './controllers/course.controller';
 import { CourseModule } from '../course/course.module';
-import { SeasonController } from './controllers/season.controller';
 import { SeasonModule } from '../season/season.module';
 import { EpisodeController } from './controllers/episode.controller';
 import { EpisodeModule } from '../episode/episode.module';
@@ -18,6 +17,9 @@ import { CourseService } from './services/course.service';
 import { courseSchema } from 'src/common/models/course.model';
 import { categorySchema } from 'src/common/models/category.model';
 import { CategoryService } from './services/category.service';
+import { SeasonService } from './services/season.service';
+import { seasonCourseSchema } from 'src/common/models/seasonCourse.model';
+import { SeasonController } from './controllers/season.controller';
 
 @Module({
   imports: [
@@ -25,8 +27,8 @@ import { CategoryService } from './services/category.service';
       { name: 'User', schema: userSchema },
       { name: 'Course', schema: courseSchema },
       { name: 'Category', schema: categorySchema },
+      { name: 'Season', schema: seasonCourseSchema },
     ]),
-    CourseModule,
     SeasonModule,
     EpisodeModule,
     AbilityModule,
@@ -41,6 +43,6 @@ import { CategoryService } from './services/category.service';
     CategoryController,
     CommentController,
   ],
-  providers: [UserService, CourseService, CategoryService],
+  providers: [UserService, CourseService, CategoryService, SeasonService],
 })
 export class AdminModule {}

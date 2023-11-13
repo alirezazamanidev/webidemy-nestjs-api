@@ -19,58 +19,8 @@ export class SeasonService {
     @InjectModel('Season') private seasonModel: PaginateModel<SeasonCourse>,
     @InjectModel('Course') private courseModel: PaginateModel<Course>,
   ) {}
-  // admin panel
-  async ShowSeasonInadminpanel(BasePaginateDTO: BasePaginateDTO) {
-    const { page, item_count } = BasePaginateDTO;
 
-    const sessons = await this.seasonModel.paginate(
-      {},
-      {
-        page,
-        limit: item_count,
-        populate: [
-          {
-            path: 'episodes',
-            select: 'title',
-          },
-          'course',
-        ],
-      },
-    );
-    return {
-      data: sessons.docs,
-      limit: sessons.limit,
-      page: sessons.page,
-      pages: sessons.pages,
-    };
-  }
-  async create() {
-    return await this.courseModel.find({});
-  }
-  async store(seasonDTO: createSeasonDTO) {
-    const { title, course, number } = seasonDTO;
-
-    const sesson = await this.seasonModel.findOne({ title }).populate('course');
-
-    if (sesson && sesson.course.id === course)
-      throw new BadRequestException(Messages.SEASON_HAS_ALREADY);
-    const newSeason = new this.seasonModel({
-      title,
-      course,
-      number,
-    });
-
-    try {
-      await newSeason.save();
-      return {
-        status: 'success',
-        message: 'The seasson has been created!',
-      };
-    } catch (err) {
-      throw new InternalServerErrorException(err.message);
-    }
-  }
-  async getOneForEdit(seasonId) {
+  async getOneForEdit(seasonId:string) {
     if (!isMongoId(seasonId))
       throw new BadRequestException('The seasonId is not  true');
     const season = await this.seasonModel.findById(seasonId).populate({

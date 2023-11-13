@@ -3,7 +3,6 @@ import { CourseModule } from '../course/course.module';
 import { CourseController } from './controllers/course.controller';
 import { EpisodeModule } from '../episode/episode.module';
 import { UserController } from './controllers/user.controller';
-import { UserModule } from '../user/user.module';
 import { CommentController } from './controllers/comment.controller';
 import { CommentModule } from '../comment/comment.module';
 import { OrderController } from './controllers/order.controller';
@@ -20,10 +19,7 @@ import { commentSchema } from 'src/common/models/comment.model';
 @Module({
   imports: [
     MongooseModule.forFeature([{ name: 'Course', schema: courseSchema }, { name: "User", schema: userSchema }, { name: 'Category', schema: categorySchema }, { name: 'Comment', schema: commentSchema }]),
-    CourseModule,
     EpisodeModule,
-    UserModule,
-    CommentModule,
     OrderModule,
   ],
   controllers: [
