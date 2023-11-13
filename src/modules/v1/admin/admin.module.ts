@@ -18,6 +18,8 @@ import { CategoryService } from './services/category.service';
 import { SeasonService } from './services/season.service';
 import { seasonCourseSchema } from 'src/common/models/seasonCourse.model';
 import { SeasonController } from './controllers/season.controller';
+import { EpisodeService } from './services/episode.service';
+import { episodeSchema } from 'src/common/models/episode.model';
 
 @Module({
   imports: [
@@ -26,6 +28,7 @@ import { SeasonController } from './controllers/season.controller';
       { name: 'Course', schema: courseSchema },
       { name: 'Category', schema: categorySchema },
       { name: 'Season', schema: seasonCourseSchema },
+      { name: 'Episode', schema: episodeSchema },
     ]),
     EpisodeModule,
     AbilityModule,
@@ -40,6 +43,6 @@ import { SeasonController } from './controllers/season.controller';
     CategoryController,
     CommentController,
   ],
-  providers: [UserService, CourseService, CategoryService, SeasonService],
+  providers: [UserService, CourseService, CategoryService, SeasonService, EpisodeService],
 })
 export class AdminModule { }

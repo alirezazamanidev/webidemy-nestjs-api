@@ -10,12 +10,15 @@ import {
   Put,
   Query,
 } from '@nestjs/common';
-import { EpisodeService } from '../../episode/episode.service';
+
 import { Auth } from 'src/common/decorators/Auth.decorator';
 import { UploadVideoFile } from 'src/common/decorators/uploadFile.decorator';
 import { GetCurrentEpisode } from 'src/common/decorators/get-current-episode.decorator';
 import { CreateEpisodeDTO, UpdateEpisodeDTO } from '../dto/admin.dto';
 import { BasePaginateDTO } from 'src/common/dtos/base-paginate.dto';
+import { EpisodeService } from '../services/episode.service';
+import { User } from 'src/common/decorators/User.decorator';
+import { JwtPayload } from '../../auth/types/jwtpayload.type';
 @Auth()
 @Controller({
   path: 'admin/episodes',
@@ -36,8 +39,8 @@ export class EpisodeController {
   }
   @HttpCode(HttpStatus.OK)
   @Get('/create')
-  async create() {
-    return await this.episodeService.create();
+  async create(@User() user:JwtPayload) {
+    return await this.episodeService.create(user);
   }
   @HttpCode(HttpStatus.OK)
   @Delete('/:episodeId')
