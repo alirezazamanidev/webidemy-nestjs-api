@@ -78,7 +78,7 @@ export class EpisodeService {
                         path: 'season',
                         populate: {
                             path: 'course',
-                            select: ['title','teacher']
+                            select: ['title', 'teacher']
                         },
                     },
                 ],
@@ -182,7 +182,10 @@ export class EpisodeService {
             .populate('season')
             .exec();
         if (!episode) throw new NotFoundException('the episode not founded');
-        return episode;
+        return {
+            episode,
+            status: 'success'
+        };
     }
     async update(episodeId: string, episodeDTO: UpdateEpisodeDTO) {
         const { title, body, file, type, time, number, season } = episodeDTO;
