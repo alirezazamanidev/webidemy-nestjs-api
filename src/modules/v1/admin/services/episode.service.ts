@@ -25,12 +25,12 @@ export class EpisodeService {
         @InjectModel('Course') private courseModel: PaginateModel<Course>,
     ) { }
 
-    async create(user:JwtPayload) {
-        const seasons=await this.seasonModel.find({}).populate({
-            path:'course',
-            select:['title','teacher']
+    async create(user: JwtPayload) {
+        const seasons = await this.seasonModel.find({}).populate({
+            path: 'course',
+            select: ['title', 'teacher']
         });
-        return seasons.map(season=>{
+        return seasons.map(season => {
             return season?.course.teacher.toString() === user.id && season;
         })
     }
@@ -65,7 +65,7 @@ export class EpisodeService {
         return newEpisode;
     }
 
-    async ShowEpisodesInAdminPanel(BasePaginateDTO: BasePaginateDTO) {
+    async index(BasePaginateDTO: BasePaginateDTO, user: JwtPayload) {
         const { page, item_count } = BasePaginateDTO;
 
         const episodes = await this.episodeModel.paginate(
@@ -78,14 +78,18 @@ export class EpisodeService {
                         path: 'season',
                         populate: {
                             path: 'course',
+                            select: ['title','teacher']
                         },
                     },
                 ],
             },
         );
 
+        let episodeList = episodes.docs.map(episode => {
+            return episode.season.course.teacher.toString() === user.id && episode;
+        })
         return {
-            data: episodes.docs,
+            data: episodeList,
             limit: episodes.limit,
             page: episodes.page,
             pages: episodes.pages,

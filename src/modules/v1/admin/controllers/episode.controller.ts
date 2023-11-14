@@ -28,8 +28,8 @@ export class EpisodeController {
   constructor(private episodeService: EpisodeService) {}
   @HttpCode(HttpStatus.OK)
   @Get()
-  async Index(@Query() BasePaginateDTO: BasePaginateDTO) {
-    return await this.episodeService.ShowEpisodesInAdminPanel(BasePaginateDTO);
+  async Index(@Query() BasePaginateDTO: BasePaginateDTO,@User() user:JwtPayload) {
+    return await this.episodeService.index(BasePaginateDTO,user);
   }
   @HttpCode(HttpStatus.CREATED)
   @Post('/create')

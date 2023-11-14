@@ -9,8 +9,6 @@ import { AbilityFactory } from '../../ability/ability.factory';
 import { CHECK_ABILITY, RequireRole } from '../../ability/ability.decorators';
 
 import { ForbiddenError } from '@casl/ability';
-import { User } from 'src/common/interfaces/user.interface';
-import { Action } from 'src/common/enums/action.enum';
 
 @Injectable()
 export class AbilityGuard implements CanActivate {
