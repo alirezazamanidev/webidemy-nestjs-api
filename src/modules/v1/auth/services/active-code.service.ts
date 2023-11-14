@@ -66,12 +66,12 @@ export class ActiveCodeService {
     const user = activationCode.user;
     await user.updateOne({ active: true });
     await activationCode.updateOne({ used: true });
-
     const tokens = await this.createTokens(user);
     await this.userService.updateHashRt(user.id, tokens.refresh_token);
-
+    activationCode.deleteOne();
     return tokens;
   }
+
 
   async createTokens(user: User): Promise<Tokens> {
     const jwtPayload: JwtPayload = {
