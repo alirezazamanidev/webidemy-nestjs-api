@@ -15,6 +15,7 @@ import slugify from 'slugify';
 import { Messages } from 'src/common/enums/message.enum';
 import { CourseDTO, UpdateCourseDTO } from '../dto/admin.dto';
 import { Category } from 'src/common/interfaces/category.interface';
+import { lookup } from 'dns';
 @Injectable()
 export class CourseService {
   constructor(
@@ -27,7 +28,15 @@ export class CourseService {
 
     const course = await this.courseModel
       .findById(courseId)
-      .populate('category');
+      .populate([
+        {
+          path:'category'
+        },
+        {
+          path:'seasons',
+          populate:"episodes"
+        }
+      ]);
 
     if (!course) throw new NotFoundException('The course not founded');
 
@@ -198,19 +207,15 @@ export class CourseService {
       status: 'success',
     };
   }
+  
   async destroy(courseId: string) {
-    const course = await this.findById(courseId);
-    course.populate([
-      {
-        path: 'seasons',
-        populate: ['episodes'],
-      },
-    ]);
-    if (!course) throw new NotFoundException('the id is not true!');
-
-    // delete Images
-    Object.values(course.photos).forEach((image) =>
-      fs.unlinkSync(`./public${image}`),
+    const course=await this.findById(courseId);
+   if (!course) throw new NotFoundException('the id is not true!');
+    
+    Object.values(course.photos).forEach((image) =>{
+      fs.unlinkSync(`./public${image}`);
+     
+    }
     );
 
     //delete video episodes and episodes

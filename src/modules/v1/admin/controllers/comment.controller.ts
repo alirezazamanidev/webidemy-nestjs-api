@@ -11,9 +11,11 @@ import {
   Req,
 } from '@nestjs/common';
 import { BasePaginateDTO } from 'src/common/dtos/base-paginate.dto';
-import { CommentService } from '../../comment/comment.service';
 import { AnswerCommentDTO } from '../../home/dtos/home.dto';
 import { Auth } from 'src/common/decorators/Auth.decorator';
+import { CommentService } from '../services/comment.service';
+import { User } from 'src/common/decorators/User.decorator';
+import { JwtPayload } from '../../auth/types/jwtpayload.type';
 
 @Auth()
 @Controller({
@@ -23,22 +25,25 @@ import { Auth } from 'src/common/decorators/Auth.decorator';
 export class CommentController {
   constructor(private commentService: CommentService) {}
   @HttpCode(HttpStatus.OK)
-  @Get('/approved')
-  async IndexNotApproved(@Query() BasePaginateDTO: BasePaginateDTO) {
+  @Get('')
+  async IndexNotApproved(@Query() BasePaginateDTO: BasePaginateDTO,@User() user:JwtPayload) {
     return await this.commentService.paginateShowCommentsNotApproved(
       BasePaginateDTO,
+      user
     );
   }
-  @HttpCode(HttpStatus.OK)
-  @Post('/approved')
-  async Approved(@Body() commentDTO: AnswerCommentDTO, @Req() req) {
-    return this.commentService.approved(commentDTO, req.user.id);
-  }
+  // @HttpCode(HttpStatus.OK)
+  // @Post('/approved')
+  // async Approved(@Body() commentDTO: AnswerCommentDTO, @Req() req) {
+  //   return this.commentService.approved(commentDTO, req.user.id);
+  // }
   @HttpCode(HttpStatus.OK)
   @Get()
-  async IndexApproved(@Query() BasePaginateDTO: BasePaginateDTO) {
+  async IndexApproved(@Query() BasePaginateDTO: BasePaginateDTO,@User() user:JwtPayload) {
     return await this.commentService.paginateShowCommentsApproved(
       BasePaginateDTO,
+      user
+      
     );
   }
   @HttpCode(HttpStatus.OK)
