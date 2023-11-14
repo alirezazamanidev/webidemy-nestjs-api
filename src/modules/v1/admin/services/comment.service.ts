@@ -19,12 +19,12 @@ export class CommentService {
         if (!comment) throw new NotFoundException('The comment not found');
         return comment;
     }
-   
+
     async index(BasePaginateDTO: BasePaginateDTO, user: JwtPayload) {
         const { page, item_count } = BasePaginateDTO;
 
         const comments = await this.commentModel.paginate(
-            {  },
+            {},
             {
                 page,
                 limit: item_count,
@@ -36,14 +36,19 @@ export class CommentService {
                     },
                     {
                         path: 'course',
-                        select:['title','slug','teacher']
+                        select: ['title', 'slug', 'teacher']
 
                     },
                     {
-                        path:'episode',
-                        populate:{
-                            path:'season',
-                            populate:'course'
+                        path: 'episode',
+                        select:['season'],
+                        populate: {
+                            path: 'season',
+                            select:['course'],
+                            populate:{
+                                path:'course',
+                                select:'teacher'
+                            }
                         }
                     }
                 ],
@@ -51,25 +56,25 @@ export class CommentService {
         );
 
 
-        let CheckCommentType=(comment:Comment)=>{
-            if(comment?.course){
-                console.log('course');
-                
+        let CheckCommentType = (comment: Comment) => {
+            if (comment?.course) {
+
+
                 return comment;
             }
-            else if(comment?.episode){
-                
-                
-                
+            else if (comment?.episode) {
+
+
+
                 return comment.episode.season;
             }
 
         }
-        
-        
+
+
         let commentList = comments.docs.map(comment => {
 
-            
+
             return CheckCommentType(comment).course.teacher.toString() === user.id && comment;
         })
 
@@ -119,8 +124,8 @@ export class CommentService {
         const comment = await this.findById(commentId);
         comment.deleteOne();
         return {
-          status: 'success',
+            status: 'success',
         };
-      }
-    
+    }
+
 }
