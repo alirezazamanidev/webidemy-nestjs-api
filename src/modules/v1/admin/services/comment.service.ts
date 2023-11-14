@@ -20,11 +20,11 @@ export class CommentService {
         return comment;
     }
    
-    async paginateShowCommentsNotApproved(BasePaginateDTO: BasePaginateDTO, user: JwtPayload) {
+    async index(BasePaginateDTO: BasePaginateDTO, user: JwtPayload) {
         const { page, item_count } = BasePaginateDTO;
 
         const comments = await this.commentModel.paginate(
-            { approved: false },
+            {  },
             {
                 page,
                 limit: item_count,
@@ -37,18 +37,40 @@ export class CommentService {
                     {
                         path: 'course',
                         select:['title','slug','teacher']
-                        
+
                     },
+                    {
+                        path:'episode',
+                        populate:{
+                            path:'season',
+                            populate:'course'
+                        }
+                    }
                 ],
             },
         );
 
+
+        let CheckCommentType=(comment:Comment)=>{
+            if(comment?.course){
+                console.log('course');
+                
+                return comment;
+            }
+            else if(comment?.episode){
+                
+                
+                
+                return comment.episode.season;
+            }
+
+        }
         
         
         let commentList = comments.docs.map(comment => {
-          
+
             
-            return comment.course?.teacher.toString() === user.id && comment;
+            return CheckCommentType(comment).course.teacher.toString() === user.id && comment;
         })
 
 
@@ -60,38 +82,38 @@ export class CommentService {
         };
     }
 
-    async paginateShowCommentsApproved(BasePaginateDTO: BasePaginateDTO,user:JwtPayload) {
-        const { page, item_count } = BasePaginateDTO;
+    // async paginateShowCommentsApproved(BasePaginateDTO: BasePaginateDTO,user:JwtPayload) {
+    //     const { page, item_count } = BasePaginateDTO;
 
-        const comments = await this.commentModel.paginate(
-            { approved: true },
-            {
-                page,
-                limit: item_count,
-                sort: { createdAt: -1 },
-                populate: [
-                    {
-                        path: 'user',
-                        select: ['fullname', 'username', 'avatar'],
-                    },
-                    {
-                        path: 'course',
-                        select: ['title', 'slug','teacher'],
-                    },
-                ],
-            },
-        );
+    //     const comments = await this.commentModel.paginate(
+    //         { approved: true },
+    //         {
+    //             page,
+    //             limit: item_count,
+    //             sort: { createdAt: -1 },
+    //             populate: [
+    //                 {
+    //                     path: 'user',
+    //                     select: ['fullname', 'username', 'avatar'],
+    //                 },
+    //                 {
+    //                     path: 'course',
+    //                     select: ['title', 'slug','teacher'],
+    //                 },
+    //             ],
+    //         },
+    //     );
 
-        let commentList = comments.docs.map(comment => {
-            return comment.course.teacher.toString() === user.id && comment;
-        })
-        return {
-            data: commentList,
-            limit: comments.limit,
-            page: comments.page,
-            pages: comments.pages,
-        };
-    }
+    //     let commentList = comments.docs.map(comment => {
+    //         return comment.course.teacher.toString() === user.id && comment;
+    //     })
+    //     return {
+    //         data: commentList,
+    //         limit: comments.limit,
+    //         page: comments.page,
+    //         pages: comments.pages,
+    //     };
+    // }
 
     async destroy(commentId: string) {
         const comment = await this.findById(commentId);

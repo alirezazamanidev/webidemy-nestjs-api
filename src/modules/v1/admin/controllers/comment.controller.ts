@@ -26,8 +26,8 @@ export class CommentController {
   constructor(private commentService: CommentService) {}
   @HttpCode(HttpStatus.OK)
   @Get('')
-  async IndexNotApproved(@Query() BasePaginateDTO: BasePaginateDTO,@User() user:JwtPayload) {
-    return await this.commentService.paginateShowCommentsNotApproved(
+  async Index(@Query() BasePaginateDTO: BasePaginateDTO,@User() user:JwtPayload) {
+    return await this.commentService.index(
       BasePaginateDTO,
       user
     );
@@ -37,15 +37,15 @@ export class CommentController {
   // async Approved(@Body() commentDTO: AnswerCommentDTO, @Req() req) {
   //   return this.commentService.approved(commentDTO, req.user.id);
   // }
-  @HttpCode(HttpStatus.OK)
-  @Get()
-  async IndexApproved(@Query() BasePaginateDTO: BasePaginateDTO,@User() user:JwtPayload) {
-    return await this.commentService.paginateShowCommentsApproved(
-      BasePaginateDTO,
-      user
+  // @HttpCode(HttpStatus.OK)
+  // @Get()
+  // async IndexApproved(@Query() BasePaginateDTO: BasePaginateDTO,@User() user:JwtPayload) {
+  //   return await this.commentService.paginateShowCommentsApproved(
+  //     BasePaginateDTO,
+  //     user
       
-    );
-  }
+  //   );
+  // }
   @HttpCode(HttpStatus.OK)
   @Delete(':commentId')
   async DeleteOne(@Param('commentId') commentId: string) {
