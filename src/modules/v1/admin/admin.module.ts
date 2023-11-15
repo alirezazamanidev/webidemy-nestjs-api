@@ -22,6 +22,7 @@ import { CommentService } from './services/comment.service';
 import { commentSchema } from 'src/common/models/comment.model';
 import { blogSchema } from 'src/common/models/blog.model';
 import { BlogService } from './services/blog.service';
+import { BlogController } from './controllers/blog.controller';
 
 @Module({
   imports: [
@@ -45,6 +46,7 @@ import { BlogService } from './services/blog.service';
     UserController,
     CategoryController,
     CommentController,
+    BlogController,
   ],
   providers: [UserService, CourseService, CategoryService, SeasonService, EpisodeService, CommentService, BlogService],
 })
