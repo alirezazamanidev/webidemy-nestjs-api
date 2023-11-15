@@ -113,3 +113,14 @@ export class createCategoryDTO {
   @IsNotEmpty()
   title: string;
 }
+export class BlogDTO {
+  @IsNotEmpty()
+  title:string;
+  @IsNotEmpty()
+  description: string;
+  @IsNotEmpty()
+  photo:Express.Multer.File
+  @IsNotEmpty()
+  studyTime:string
+  
+}
