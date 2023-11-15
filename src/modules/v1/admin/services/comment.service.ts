@@ -5,6 +5,7 @@ import { BasePaginateDTO } from 'src/common/dtos/base-paginate.dto';
 import { Comment } from 'src/common/interfaces/comment.interface';
 import isMongoId from 'validator/lib/isMongoId';
 import { JwtPayload } from '../../auth/types/jwtpayload.type';
+import { AnswerCommentDTO } from '../../home/dtos/home.dto';
 
 @Injectable()
 export class CommentService {
@@ -41,13 +42,13 @@ export class CommentService {
                     },
                     {
                         path: 'episode',
-                        select:['season'],
+                        select: ['season','title'],
                         populate: {
                             path: 'season',
-                            select:['course'],
-                            populate:{
-                                path:'course',
-                                select:'teacher'
+                            select: ['course'],
+                            populate: {
+                                path: 'course',
+                                select: 'teacher'
                             }
                         }
                     }
@@ -119,6 +120,24 @@ export class CommentService {
     //         pages: comments.pages,
     //     };
     // }
+    async approved(commentDTO: AnswerCommentDTO, userId: string) {
+        const parentComment = await this.findById(commentDTO.parent);
+    
+        const newComment = new this.commentModel({
+          user: userId,
+          parent: parentComment.id,
+          comment: commentDTO.comment,
+          approved: true,
+          ...commentDTO.subject
+        });
+        await newComment.save();
+        await parentComment.updateOne({ $set: { approved: true } });
+    
+        return {
+          status: 'success',
+        };
+      }
+    
 
     async destroy(commentId: string) {
         const comment = await this.findById(commentId);

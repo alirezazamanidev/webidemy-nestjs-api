@@ -37,7 +37,6 @@ export class CourseService {
           populate:"episodes"
         }
       ]);
-
     if (!course) throw new NotFoundException('The course not founded');
 
     return course;

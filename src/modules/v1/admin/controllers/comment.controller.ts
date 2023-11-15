@@ -32,11 +32,11 @@ export class CommentController {
       user
     );
   }
-  // @HttpCode(HttpStatus.OK)
-  // @Post('/approved')
-  // async Approved(@Body() commentDTO: AnswerCommentDTO, @Req() req) {
-  //   return this.commentService.approved(commentDTO, req.user.id);
-  // }
+  @HttpCode(HttpStatus.OK)
+  @Post('/approved')
+  async Approved(@Body() commentDTO: AnswerCommentDTO, @User() user:JwtPayload) {
+    return this.commentService.approved(commentDTO, user.id);
+  }
   // @HttpCode(HttpStatus.OK)
   // @Get()
   // async IndexApproved(@Query() BasePaginateDTO: BasePaginateDTO,@User() user:JwtPayload) {

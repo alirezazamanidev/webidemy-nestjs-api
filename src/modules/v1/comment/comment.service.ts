@@ -30,23 +30,6 @@ export class CommentService {
  
 
 
-  async approved(commentDTO: AnswerCommentDTO, userId: string) {
-    const parentComment = await this.findById(commentDTO.parent);
-
-    const newComment = new this.commentModel({
-      user: userId,
-      parent: parentComment.id,
-      comment: commentDTO.comment,
-      approved: true,
-      ...commentDTO,
-    });
-    await newComment.save();
-    await parentComment.updateOne({ $set: { approved: true } });
-
-    return {
-      status: 'success',
-    };
-  }
 
   // get comment for public route
 

@@ -21,8 +21,11 @@ export class createCommentDTO {
 }
 export class AnswerCommentDTO {
   user: string;
-  course: string;
-  episode: string;
+  subject:{
+    episode?:string;
+    course?:string;
+
+  }
   comment: string;
   parent: string;
 }
