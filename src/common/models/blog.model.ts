@@ -8,10 +8,10 @@ const blogSchema = new Schema(
     title: { type: String, required: true },
     isPublished: { type: Boolean, default: false },
     slug: { type: String, required: true },
+    description:{type:String,required:true},
     studyTime: { type: String, required: true },
     images: { type: Object, required: true },
     likeCount: { type: Number, default: 0 },
-    
     viewCount: { type: Number, default: 0 },
     commentCount: { type: Number, default: 0 },
   },
