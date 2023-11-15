@@ -1,6 +1,5 @@
 import { Module } from '@nestjs/common';
 import { CourseController } from './controllers/course.controller';
-import { EpisodeModule } from '../episode/episode.module';
 import { UserController } from './controllers/user.controller';
 import { CommentController } from './controllers/comment.controller';
 import { OrderController } from './controllers/order.controller';
@@ -17,7 +16,6 @@ import { commentSchema } from 'src/common/models/comment.model';
 @Module({
   imports: [
     MongooseModule.forFeature([{ name: 'Course', schema: courseSchema }, { name: "User", schema: userSchema }, { name: 'Category', schema: categorySchema }, { name: 'Comment', schema: commentSchema }]),
-    EpisodeModule,
     OrderModule,
   ],
   controllers: [

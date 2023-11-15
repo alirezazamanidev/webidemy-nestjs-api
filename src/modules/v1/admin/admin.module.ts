@@ -1,11 +1,9 @@
 import { Module } from '@nestjs/common';
 import { CourseController } from './controllers/course.controller';
 import { EpisodeController } from './controllers/episode.controller';
-import { EpisodeModule } from '../episode/episode.module';
 import { UserController } from './controllers/user.controller';
 import { CategoryController } from './controllers/category.controller';
 import { CommentController } from './controllers/comment.controller';
-import { CommentModule } from '../comment/comment.module';
 import { UserService } from './services/user.service';
 import { MongooseModule } from '@nestjs/mongoose';
 import { userSchema } from 'src/common/models/user.model';
