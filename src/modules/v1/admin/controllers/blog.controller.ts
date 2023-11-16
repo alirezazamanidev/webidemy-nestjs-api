@@ -33,7 +33,7 @@ export class BlogController {
         return await this.blogService.destroy(blogId);
     }
     @HttpCode(HttpStatus.OK)
-    @Put(':blogId')
+    @Put('published/:blogId')
     async UpdatePublished(@Param('blogId') blogId:string){
         return await this.blogService.updatePublished(blogId);
     }
