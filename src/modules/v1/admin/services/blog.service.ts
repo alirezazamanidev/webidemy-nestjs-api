@@ -9,11 +9,20 @@ import * as sharp from 'sharp';
 import * as fs from 'fs';
 import slugify from 'slugify';
 import { Messages } from 'src/common/enums/message.enum';
+import isMongoId from 'validator/lib/isMongoId';
 @Injectable()
 export class BlogService {
 
     constructor(@InjectModel('Blog') private BlogModel: PaginateModel<Blog>) { }
 
+    async findOneById(blogId: string): Promise<Blog> {
+        if (!isMongoId(blogId)) throw new BadRequestException("The blog Id is not true");
+
+        const blog = await this.BlogModel.findById(blogId);
+
+        return blog;
+
+    }
     async index(BasePaginateDTO: BasePaginateDTO, userId: string) {
         const { page, item_count } = BasePaginateDTO
         const blogPaginate = await this.BlogModel.paginate({ author: userId }, {
@@ -63,6 +72,8 @@ export class BlogService {
             messages: "The blog has been created!"
         }
     }
+
+    
     private ResizeImage(image: Express.Multer.File) {
 
         const imageInfo = path.parse(image.path);
