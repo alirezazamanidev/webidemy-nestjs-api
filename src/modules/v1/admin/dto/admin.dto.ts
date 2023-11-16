@@ -119,6 +119,8 @@ export class BlogDTO {
   @IsNotEmpty()
   title: string;
   @IsNotEmpty()
+  category:string
+  @IsNotEmpty()
   description: string;
   @IsNotEmpty()
   file: Express.Multer.File

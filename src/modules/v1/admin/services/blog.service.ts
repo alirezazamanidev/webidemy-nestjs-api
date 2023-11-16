@@ -17,10 +17,13 @@ export class BlogService {
     async index(BasePaginateDTO: BasePaginateDTO, userId: string) {
         const { page, item_count } = BasePaginateDTO
         const blogPaginate = await this.BlogModel.paginate({ author: userId }, {
-            page, limit: item_count, populate: {
+            page, limit: item_count, populate: [{
                 path: 'author',
                 select: ['fullname']
-            }
+            }, {
+                path: 'category',
+                select: ['title']
+            }]
         })
 
 
@@ -33,7 +36,7 @@ export class BlogService {
     }
 
     async store(blogDTO: BlogDTO) {
-        const { title, description, file, studyTime, user, toColor, fromColor, tags } = blogDTO;
+        const { title, description, category, file, studyTime, user, toColor, fromColor, tags } = blogDTO;
 
         const images = this.ResizeImage(file);
         const blog = await this.BlogModel.findOne({ title });
@@ -42,6 +45,7 @@ export class BlogService {
         const newBlog = new this.BlogModel({
             author: user.id,
             title,
+            category,
             slug: slugify(title, '-'),
             description,
             studyTime,
