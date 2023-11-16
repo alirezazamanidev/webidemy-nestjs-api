@@ -9,7 +9,7 @@ const getUrlImage = () => {
   return `./public/uploads/images/courses/${year}/${month}/${day}`;
 };
 
-export const ImageStorage = multer.diskStorage({
+export const PhotoCourseStorage = multer.diskStorage({
   destination: (req, file, cb) => {
     const dir = getUrlImage();
     mkdirp(dir, () => cb(null, dir));

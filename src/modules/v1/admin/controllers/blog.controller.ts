@@ -1,4 +1,4 @@
-import { Controller, Get, HttpCode, HttpStatus, Query } from '@nestjs/common';
+import { Controller, Get, HttpCode, HttpStatus, Post, Query } from '@nestjs/common';
 import { BlogService } from '../services/blog.service';
 import { BasePaginateDTO } from 'src/common/dtos/base-paginate.dto';
 import { User } from 'src/common/decorators/User.decorator';
@@ -18,4 +18,9 @@ export class BlogController {
     async Index(@Query() BasePaginateDTO:BasePaginateDTO,@User() user:JwtPayload){
         return await this.blogService.index(BasePaginateDTO,user.id);
     }
+    // @HttpCode(HttpStatus.CREATED)
+    // @Post('/create')
+    // async Store(){
+    //     return await this.blogService.
+    // }
 }

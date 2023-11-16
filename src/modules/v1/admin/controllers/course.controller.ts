@@ -10,7 +10,7 @@ import {
   Query,
   UseGuards,
 } from '@nestjs/common';
-import { UploadImageFile } from 'src/common/decorators/uploadFile.decorator';
+
 import { GetCurrentCourse } from 'src/common/decorators/get-current-course.decorator';
 import { CourseDTO, UpdateCourseDTO } from '../dto/admin.dto';
 import { Auth } from 'src/common/decorators/Auth.decorator';
@@ -22,6 +22,7 @@ import { AbilityGuard } from '../guards/ability.guard';
 import { CourseService } from '../services/course.service';
 import { User } from 'src/common/decorators/User.decorator';
 import { JwtPayload } from '../../auth/types/jwtpayload.type';
+import { UploadPhotoCourseFile } from 'src/common/decorators/uploadFile.decorator';
 
 @Auth()
 @Controller({
@@ -58,7 +59,7 @@ export class CourseController {
   @Post('/create')
   @CheckAbilities({ action: Action.Create, subjects: Course })
   @UseGuards(AbilityGuard)
-  @UploadImageFile('photo')
+  @UploadPhotoCourseFile('photo')
   async Store(@GetCurrentCourse() courseDTO: CourseDTO) {
     return await this.courseService.store(courseDTO);
   }
@@ -78,7 +79,7 @@ export class CourseController {
   }
   @HttpCode(HttpStatus.OK)
   @Put('/edit/:id')
-  @UploadImageFile('photo')
+  @UploadPhotoCourseFile('photo')
   async Update(
     @Param('id') courseId: string,
     @GetCurrentCourse() courseDTO: UpdateCourseDTO,
