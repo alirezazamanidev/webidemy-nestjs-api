@@ -73,12 +73,12 @@ export class BlogService {
         }
     }
 
-    async destroy(blogId:string){
-        const blog=await this.findOneById(blogId);
-        if(!blog) throw new NotFoundException('The blog is not found!');
+    async destroy(blogId: string) {
+        const blog = await this.findOneById(blogId);
+        if (!blog) throw new NotFoundException('The blog is not found!');
 
         // delete  blpg image
-        Object.values(blog.photos).forEach(image=>{
+        Object.values(blog.photos).forEach(image => {
             fs.unlinkSync(`./public${image}`);
         })
 
@@ -86,14 +86,27 @@ export class BlogService {
         blog.deleteOne();
 
         return {
-            status:'success',
-            message:'The blog has been removed',
+            status: 'success',
+            message: 'The blog has been removed',
 
         }
 
     }
 
-    
+    async updatePublished(blogId: string) {
+
+        const blog = await this.findOneById(blogId);
+
+        if (!blog) throw new NotFoundException('The blog not found!');
+
+        await blog.updateOne({$set:{isPublished:!blog.isPublished}});
+
+        return {
+            status:'success'
+        }
+    }
+
+
     private ResizeImage(image: Express.Multer.File) {
 
         const imageInfo = path.parse(image.path);

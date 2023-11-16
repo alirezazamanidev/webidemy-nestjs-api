@@ -1,4 +1,4 @@
-import { Controller, Delete, Get, HttpCode, HttpStatus, Param, Post, Query } from '@nestjs/common';
+import { Controller, Delete, Get, HttpCode, HttpStatus, Param, Post, Put, Query } from '@nestjs/common';
 import { BlogService } from '../services/blog.service';
 import { BasePaginateDTO } from 'src/common/dtos/base-paginate.dto';
 import { User } from 'src/common/decorators/User.decorator';
@@ -31,5 +31,10 @@ export class BlogController {
     @Delete(':blogId')
     async deleteOne(@Param('blogId') blogId:string){
         return await this.blogService.destroy(blogId);
+    }
+    @HttpCode(HttpStatus.OK)
+    @Put(':blogId')
+    async UpdatePublished(@Param('blogId') blogId:string){
+        return await this.blogService.updatePublished(blogId);
     }
 }
