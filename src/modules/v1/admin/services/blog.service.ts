@@ -92,6 +92,12 @@ export class BlogService {
         }
 
     }
+    async edit(blogId:string){
+     return (await this.findOneById(blogId)).populate({
+        path:'category',
+        select:['title']
+     }) 
+    }
 
     async updatePublished(blogId: string) {
 
