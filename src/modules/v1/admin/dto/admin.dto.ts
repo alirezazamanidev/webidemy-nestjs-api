@@ -18,9 +18,9 @@ export class CourseDTO {
   @IsNotEmpty()
   description: string;
   @IsNotEmpty()
-  fromColor:string
+  fromColor: string
   @IsNotEmpty()
-  toColor:string
+  toColor: string
   @IsNotEmpty()
   file: Express.Multer.File;
   @IsNotEmpty()
@@ -115,14 +115,20 @@ export class createCategoryDTO {
   title: string;
 }
 export class BlogDTO {
-  user:JwtPayload
+  user: JwtPayload
   @IsNotEmpty()
-  title:string;
+  title: string;
   @IsNotEmpty()
   description: string;
   @IsNotEmpty()
-  file:Express.Multer.File
+  file: Express.Multer.File
   @IsNotEmpty()
-  studyTime:string
-  
+  studyTime: string
+  @IsNotEmpty()
+  fromColor: string;
+  @IsNotEmpty()
+  toColor: string;
+  @IsNotEmpty()
+  tags:string;
+
 }

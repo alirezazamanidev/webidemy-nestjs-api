@@ -33,7 +33,7 @@ export class BlogService {
     }
 
     async store(blogDTO: BlogDTO) {
-        const { title, description, file, studyTime, user } = blogDTO;
+        const { title, description, file, studyTime, user, toColor, fromColor, tags } = blogDTO;
 
         const images = this.ResizeImage(file);
         const blog = await this.BlogModel.findOne({ title });
@@ -42,9 +42,15 @@ export class BlogService {
         const newBlog = new this.BlogModel({
             author: user.id,
             title,
+            slug: slugify(title, '-'),
             description,
             studyTime,
-            images
+            photos: images,
+            GradientCardBlog: {
+                fromColor,
+                toColor,
+            }, tags
+
         });
 
         await newBlog.save();

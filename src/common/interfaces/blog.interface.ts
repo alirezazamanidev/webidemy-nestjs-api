@@ -5,11 +5,16 @@ export interface Blog extends Document {
     id: string;
     author: User
     title: string
-    description:string
+    description: string
     isPublished: boolean
     slug: string
     studyTime: string
-    images: {}
+    photos: {}
+    tags: string;
+    GradientCardBlog: {
+        toColor: string;
+        fromColor: string;
+    },
     likeCount: number;
     viewCount: number;
     commentCount: number;
