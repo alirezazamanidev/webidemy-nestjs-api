@@ -26,7 +26,7 @@ export class BlogService {
     async index(BasePaginateDTO: BasePaginateDTO, userId: string) {
         const { page, item_count } = BasePaginateDTO
         const blogPaginate = await this.BlogModel.paginate({ author: userId }, {
-            page, limit: item_count, populate: [{
+            page, limit: item_count, sort: { createdAt: -1 }, populate: [{
                 path: 'author',
                 select: ['fullname']
             }, {
@@ -92,56 +92,56 @@ export class BlogService {
         }
 
     }
-    async edit(blogId:string){
-     return (await this.findOneById(blogId)).populate({
-        path:'category',
-        select:['title']
-     }) 
+    async edit(blogId: string) {
+        return (await this.findOneById(blogId)).populate({
+            path: 'category',
+            select: ['title']
+        })
     }
 
-    async update(blogId: string, blogDTO:BlogDTO) {
+    async update(blogId: string, blogDTO: BlogDTO) {
         const {
-          user,
-          title,
-          category,
-          description,
-          fromColor,
-          toColor,
-          studyTime,
-          file,
+            user,
+            title,
+            category,
+            description,
+            fromColor,
+            toColor,
+            studyTime,
+            file,
         } = blogDTO;
         const blog = await this.findOneById(blogId);
         const objectforUpdate = {};
         if (file) {
-          Object.values(blog.photos).forEach((image) =>
-            fs.unlinkSync(`./public${image}`),
-          );
-          objectforUpdate['photos'] = this.ResizeImage(file);
+            Object.values(blog.photos).forEach((image) =>
+                fs.unlinkSync(`./public${image}`),
+            );
+            objectforUpdate['photos'] = this.ResizeImage(file);
         } else {
-          objectforUpdate['photos'] = blog.photos;
+            objectforUpdate['photos'] = blog.photos;
         }
         await blog.updateOne({
-          $set: {
-            author: user.id,
-            title,
-            slug: slugify(title, '-'),        
-            category,
-            studyTime,
-    
-            GradientCardBlog: {
-              toColor,
-              fromColor,
+            $set: {
+                author: user.id,
+                title,
+                slug: slugify(title, '-'),
+                category,
+                studyTime,
+
+                GradientCardBlog: {
+                    toColor,
+                    fromColor,
+                },
+                description,
+                ...objectforUpdate,
             },
-            description,
-            ...objectforUpdate,
-          },
         });
-    
+
         return {
-          status: 'success',
+            status: 'success',
         };
-      }
-      
+    }
+
 
     async updatePublished(blogId: string) {
 
@@ -149,10 +149,10 @@ export class BlogService {
 
         if (!blog) throw new NotFoundException('The blog not found!');
 
-        await blog.updateOne({$set:{isPublished:!blog.isPublished}});
+        await blog.updateOne({ $set: { isPublished: !blog.isPublished } });
 
         return {
-            status:'success'
+            status: 'success'
         }
     }
 
