@@ -1,4 +1,4 @@
-import { Controller, Get, HttpCode, HttpStatus, Post, Query } from '@nestjs/common';
+import { Controller, Delete, Get, HttpCode, HttpStatus, Param, Post, Query } from '@nestjs/common';
 import { BlogService } from '../services/blog.service';
 import { BasePaginateDTO } from 'src/common/dtos/base-paginate.dto';
 import { User } from 'src/common/decorators/User.decorator';
@@ -26,5 +26,10 @@ export class BlogController {
     @UploadPhotoBlogFile('photo')
     async Store(@GetCurrentBlog() BlogDTO:BlogDTO){
         return await this.blogService.store(BlogDTO)
+    }
+    @HttpCode(HttpStatus.OK)
+    @Delete(':blogId')
+    async deleteOne(@Param('blogId') blogId:string){
+        return await this.blogService.destroy(blogId);
     }
 }

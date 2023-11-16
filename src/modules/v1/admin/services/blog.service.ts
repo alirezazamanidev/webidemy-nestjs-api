@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { PaginateModel } from 'mongoose';
 import { BasePaginateDTO } from 'src/common/dtos/base-paginate.dto';
@@ -15,7 +15,7 @@ export class BlogService {
 
     constructor(@InjectModel('Blog') private BlogModel: PaginateModel<Blog>) { }
 
-    async findOneById(blogId: string): Promise<Blog> {
+    private async findOneById(blogId: string): Promise<Blog> {
         if (!isMongoId(blogId)) throw new BadRequestException("The blog Id is not true");
 
         const blog = await this.BlogModel.findById(blogId);
@@ -71,6 +71,26 @@ export class BlogService {
             status: 'success',
             messages: "The blog has been created!"
         }
+    }
+
+    async destroy(blogId:string){
+        const blog=await this.findOneById(blogId);
+        if(!blog) throw new NotFoundException('The blog is not found!');
+
+        // delete  blpg image
+        Object.values(blog.photos).forEach(image=>{
+            fs.unlinkSync(`./public${image}`);
+        })
+
+        // delete blog
+        blog.deleteOne();
+
+        return {
+            status:'success',
+            message:'The blog has been removed',
+
+        }
+
     }
 
     
