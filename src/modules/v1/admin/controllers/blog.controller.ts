@@ -43,6 +43,12 @@ export class BlogController {
 
     }
     @HttpCode(HttpStatus.OK)
+    @UploadPhotoBlogFile('photo')
+    @Put('edit/:blogId')
+    async Update(@Param('blogId') blogId:string,@GetCurrentBlog() blogDTO:BlogDTO){
+        return await this.blogService.update(blogId,blogDTO);
+    }
+    @HttpCode(HttpStatus.OK)
     @Put('published/:blogId')
     async UpdatePublished(@Param('blogId') blogId:string){
         return await this.blogService.updatePublished(blogId);

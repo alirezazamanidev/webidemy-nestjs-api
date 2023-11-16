@@ -99,6 +99,50 @@ export class BlogService {
      }) 
     }
 
+    async update(blogId: string, blogDTO:BlogDTO) {
+        const {
+          user,
+          title,
+          category,
+          description,
+          fromColor,
+          toColor,
+          studyTime,
+          file,
+        } = blogDTO;
+        const blog = await this.findOneById(blogId);
+        const objectforUpdate = {};
+        if (file) {
+          Object.values(blog.photos).forEach((image) =>
+            fs.unlinkSync(`./public${image}`),
+          );
+          objectforUpdate['photos'] = this.ResizeImage(file);
+        } else {
+          objectforUpdate['photos'] = blog.photos;
+        }
+        await blog.updateOne({
+          $set: {
+            author: user.id,
+            title,
+            slug: slugify(title, '-'),        
+            category,
+            studyTime,
+    
+            GradientCardBlog: {
+              toColor,
+              fromColor,
+            },
+            description,
+            ...objectforUpdate,
+          },
+        });
+    
+        return {
+          status: 'success',
+        };
+      }
+      
+
     async updatePublished(blogId: string) {
 
         const blog = await this.findOneById(blogId);
