@@ -1,5 +1,6 @@
 import { IsNotEmpty } from 'class-validator';
 import { User } from 'src/common/interfaces/user.interface';
+import { JwtPayload } from '../../auth/types/jwtpayload.type';
 
 export class LoginUserAdminDTO {
   email: string;
@@ -114,12 +115,13 @@ export class createCategoryDTO {
   title: string;
 }
 export class BlogDTO {
+  user:JwtPayload
   @IsNotEmpty()
   title:string;
   @IsNotEmpty()
   description: string;
   @IsNotEmpty()
-  photo:Express.Multer.File
+  file:Express.Multer.File
   @IsNotEmpty()
   studyTime:string
   

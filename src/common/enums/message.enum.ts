@@ -15,4 +15,5 @@ export enum Messages {
   EXPIRE_ACTIVECODE = 'مهلت اعتبار کد تایید یک بار مصرف به پایان رسیده است',
   ALREDY_USE_ACTIVECODE = 'کد تایید مورد نظر یک بار استفاده شده است',
   ALREDY_EXIST_COURSE = 'چنین دوره با این عنوان قبلا در سایت ثبت شده است',
+  ALREDY_EXIST_BLOG = 'چنین مقاله قبلا با این عنوان در سایت ثبت شده است'
 }

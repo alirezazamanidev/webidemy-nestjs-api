@@ -4,6 +4,9 @@ import { BasePaginateDTO } from 'src/common/dtos/base-paginate.dto';
 import { User } from 'src/common/decorators/User.decorator';
 import { JwtPayload } from '../../auth/types/jwtpayload.type';
 import { Auth } from 'src/common/decorators/Auth.decorator';
+import { UploadPhotoBlogFile } from 'src/common/decorators/uploadFile.decorator';
+import { GetCurrentBlog } from 'src/common/decorators/get-current-blog.decorator';
+import { BlogDTO } from '../dto/admin.dto';
 
 @Auth()
 @Controller({
@@ -18,9 +21,10 @@ export class BlogController {
     async Index(@Query() BasePaginateDTO:BasePaginateDTO,@User() user:JwtPayload){
         return await this.blogService.index(BasePaginateDTO,user.id);
     }
-    // @HttpCode(HttpStatus.CREATED)
-    // @Post('/create')
-    // async Store(){
-    //     return await this.blogService.
-    // }
+    @HttpCode(HttpStatus.CREATED)
+    @Post('/create')
+    @UploadPhotoBlogFile('photo')
+    async Store(@GetCurrentBlog() BlogDTO:BlogDTO){
+        return await this.blogService.store(BlogDTO)
+    }
 }
