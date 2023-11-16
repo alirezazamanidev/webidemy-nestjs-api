@@ -3,6 +3,7 @@ import { InjectModel } from '@nestjs/mongoose';
 import { PaginateModel } from 'mongoose';
 import { BasePaginateDTO } from 'src/common/dtos/base-paginate.dto';
 import { Blog } from 'src/common/interfaces/blog.interface';
+import { BlogDTO } from '../dto/admin.dto';
 
 @Injectable()
 export class BlogService {
@@ -26,4 +27,5 @@ export class BlogService {
             pages: blogPaginate.pages,
         }
     }
+
 }
