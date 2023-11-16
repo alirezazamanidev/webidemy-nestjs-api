@@ -12,10 +12,13 @@ import { UserService } from './services/user.service';
 import { userSchema } from 'src/common/models/user.model';
 import { CommentService } from './services/comment.service';
 import { commentSchema } from 'src/common/models/comment.model';
+import { blogSchema } from 'src/common/models/blog.model';
+import { BlogController } from './controllers/blog.controller';
+import { BlogService } from './services/blog.service';
 
 @Module({
   imports: [
-    MongooseModule.forFeature([{ name: 'Course', schema: courseSchema }, { name: "User", schema: userSchema }, { name: 'Category', schema: categorySchema }, { name: 'Comment', schema: commentSchema }]),
+    MongooseModule.forFeature([{ name: 'Course', schema: courseSchema }, { name: "Blog", schema: blogSchema }, { name: "User", schema: userSchema }, { name: 'Category', schema: categorySchema }, { name: 'Comment', schema: commentSchema }]),
     OrderModule,
   ],
   controllers: [
@@ -23,7 +26,8 @@ import { commentSchema } from 'src/common/models/comment.model';
     UserController,
     CommentController,
     OrderController,
+    BlogController,
   ],
-  providers: [CourseService, UserService, CommentService],
+  providers: [CourseService, UserService, CommentService, BlogService],
 })
 export class HomeModule { }
