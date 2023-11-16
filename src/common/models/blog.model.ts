@@ -5,6 +5,8 @@ const blogSchema = new Schema(
   {
 
     author: { type: Schema.Types.ObjectId, ref: 'User', required: true },
+    category: { type: Schema.Types.ObjectId, ref: 'Category', required: true },
+
     title: { type: String, required: true },
     isPublished: { type: Boolean, default: false },
     slug: { type: String, required: true },

@@ -4,6 +4,7 @@ import { User } from "./user.interface";
 export interface Blog extends Document {
     id: string;
     author: User
+    category:string;
     title: string
     description: string
     isPublished: boolean
