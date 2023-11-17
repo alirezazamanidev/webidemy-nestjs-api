@@ -18,6 +18,7 @@ const blogSchema = new Schema(
     description: { type: String, required: true },
     studyTime: { type: String, required: true },
     photos: { type: Object, required: true },
+    likedUserList:[{type:Schema.Types.ObjectId,ref:'User'}],
     likeCount: { type: Number, default: 0 },
     viewCount: { type: Number, default: 0 },
     commentCount: { type: Number, default: 0 },

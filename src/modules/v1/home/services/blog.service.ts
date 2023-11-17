@@ -51,4 +51,17 @@ export class BlogService {
             message: "The blog has been saved!"
         }
     }
+
+    async updateLiked(userID:string,blogId:string){
+        const blog=await this.BlogModel.findById(blogId);
+
+        if(blog.likedUserList.includes(userID)){
+            await blog.updateOne({$pull:{likedUserList:userID}})
+        }
+        else{
+            await blog.updateOne({$push:{likedUserList:userID}})
+
+        }
+
+    }
 }

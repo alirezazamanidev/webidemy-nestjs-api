@@ -17,6 +17,7 @@ export interface Blog extends Document {
         toColor: string;
         fromColor: string;
     },
+    likedUserList:string[];
     likeCount: number;
     viewCount: number;
     commentCount: number;
