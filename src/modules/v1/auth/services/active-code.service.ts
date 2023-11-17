@@ -79,6 +79,7 @@ export class ActiveCodeService {
       fullname: user.fullname,
       avatar: user.avatar,
       biography: user.biography,
+      savedBlogList:user.savedBlogList,
       username: user.username,
       phone: user.phone,
       email: user.email,

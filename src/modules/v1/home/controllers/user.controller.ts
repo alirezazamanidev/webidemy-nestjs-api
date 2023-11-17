@@ -43,4 +43,5 @@ export class UserController {
   async EditProfile(@Req() req, @Body() userDTO: EditProfileUserDtO) {
     return await this.userService.editProfile(userDTO, req.user.id);
   }
+  
 }

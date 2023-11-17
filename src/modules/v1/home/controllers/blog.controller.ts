@@ -1,5 +1,8 @@
-import { Controller, Get, HttpCode, HttpStatus } from '@nestjs/common';
+import { Controller, Get, HttpCode, HttpStatus, Param } from '@nestjs/common';
 import { BlogService } from '../services/blog.service';
+import { Auth } from 'src/common/decorators/Auth.decorator';
+import { User } from 'src/common/decorators/User.decorator';
+import { JwtPayload } from '../../auth/types/jwtpayload.type';
 
 @Controller({
     path:'blogs',
@@ -14,5 +17,12 @@ export class BlogController {
             status:'success',
             blogs:await this.blogService.index()
         }
+    }
+
+    @HttpCode(HttpStatus.OK)
+    @Auth()
+    @Get('/saved/:blogId')
+    async SavedBlog(@Param('blogId') blogId:string,@User() user:JwtPayload){
+        return await this.blogService.savedBlog(user.id,blogId);
     }
 }

@@ -9,6 +9,7 @@ export class User extends Document {
   active: boolean;
   isAdmin: boolean;
   avatar: string;
+  savedBlogList:string[]
   role: string;
   biography: string;
   email: string;

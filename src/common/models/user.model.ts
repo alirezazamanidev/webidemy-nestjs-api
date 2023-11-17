@@ -12,6 +12,7 @@ export const userSchema = new Schema(
     phone: { type: String, required: true },
     biography: { type: String, defualt: null },
     role: { type: String, default: 'user' },
+    savedBlogList:[{type:Schema.Types.ObjectId,ref:'Blog'}],
     adminPassword: { type: String, default: undefined },
     avatar: { type: String, default: undefined },
     hashRt: { type: String, default: null },
