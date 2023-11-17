@@ -13,6 +13,8 @@ import { Auth } from 'src/common/decorators/Auth.decorator';
 import { UploadAvatarImageFile } from 'src/common/decorators/uploadFile.decorator';
 import { EditProfileUserDtO } from '../dtos/home.dto';
 import { UserService } from '../services/user.service';
+import { User } from 'src/common/decorators/User.decorator';
+import { JwtPayload } from '../../auth/types/jwtpayload.type';
 
 @Controller({
   path: 'users',
@@ -42,6 +44,13 @@ export class UserController {
   @Post('edit/profile')
   async EditProfile(@Req() req, @Body() userDTO: EditProfileUserDtO) {
     return await this.userService.editProfile(userDTO, req.user.id);
+  }
+
+  @Auth()
+  @HttpCode(HttpStatus.OK)
+  @Get('/blogs/bookmarked')
+  async GetBookMarkBlogs(@User() user:JwtPayload){
+    return await this.userService.findAllBookMarkedBlogs(user.id)
   }
   
 }
