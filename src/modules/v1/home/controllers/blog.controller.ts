@@ -11,6 +11,15 @@ import mongoose, { ObjectId } from 'mongoose';
 })
 export class BlogController {
     constructor(private blogService: BlogService) { }
+
+    @HttpCode(HttpStatus.OK)
+    @Get(':slug')
+    async GetSingleBlog(@Param('slug') blogSlug:string){
+        return {
+            status:'success',
+            blog:await this.blogService.singleBlog(blogSlug)
+        }
+    }
     @HttpCode(HttpStatus.OK)
     @Get('')
     async Index() {

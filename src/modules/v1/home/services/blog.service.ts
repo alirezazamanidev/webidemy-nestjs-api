@@ -23,6 +23,16 @@ export class BlogService {
         return blogs;
     }
 
+    async singleBlog(blogSlug:string):Promise<Blog>{
+        const blog=await this.BlogModel.findOne({slug:blogSlug})
+        .populate([{
+            path:'author',
+            select:['fullname','avatar','biography']
+        }]).exec();
+
+        return blog;
+    }
+
     async savedBlog(userId: string, blogId: mongoose.Types.ObjectId) {
         const user = await this.userModel.findById(userId);
 
