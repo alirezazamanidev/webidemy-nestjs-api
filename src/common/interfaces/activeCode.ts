@@ -1,8 +1,8 @@
-import { Document } from 'mongoose';
+import mongoose, { Document } from 'mongoose';
 import { User } from './user.interface';
 
 export class ActiveCode extends Document {
-  id: string;
+  id: mongoose.Types.ObjectId;
   user: User;
   phone: string;
   code: string;

@@ -78,6 +78,8 @@ export class AuthService {
   }
 
   async createTokens(user: User): Promise<Tokens> {
+  
+    
     const jwtPayload: JwtPayload = {
       id: user.id,
       fullname: user.fullname,
@@ -91,6 +93,9 @@ export class AuthService {
       role: user.role,
       isAdmin: user.isAdmin,
     };
+
+  
+    
 
     const [at, rt] = await Promise.all([
       this.jwtService.sign(jwtPayload, {

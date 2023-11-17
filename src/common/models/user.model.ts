@@ -32,3 +32,9 @@ userSchema.pre('save', function (next) {
 userSchema.methods.compareAdminPassword = function (pass:string) {
   return bcrypt.compareSync(pass, this.adminPassword);
 };
+userSchema.methods.checkBookmarkedBlog=function (blogId:mongoose.Types.ObjectId){
+  
+  
+  return !! this.savedBlogList.includes(blogId);
+
+}

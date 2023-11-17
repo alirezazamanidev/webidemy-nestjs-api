@@ -1,6 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model, PaginateModel } from 'mongoose';
+import mongoose, { Model, ObjectId, PaginateModel } from 'mongoose';
 import { Blog } from 'src/common/interfaces/blog.interface';
 import { User } from 'src/common/interfaces/user.interface';
 
@@ -23,24 +23,29 @@ export class BlogService {
         return blogs;
     }
 
-    async savedBlog(userId: string, blogId: string) {
+    async savedBlog(userId: string, blogId: mongoose.Types.ObjectId) {
+
 
         const user = await this.userModel.findById(userId);
         const blog = await this.BlogModel.findById(blogId);
         if (!user) throw new NotFoundException("The user not founded");
-        if(user.savedBlogList.includes(blog.id)){
-        let index=user.savedBlogList.indexOf(blogId);
-         if(index>-1){
-            user.savedBlogList.splice(index,1);
-         }
-           
-        }else {
-           
-            user.savedBlogList.push(blog.id);            
+
+
+
+        if (user.checkBookmarkedBlog(blog.id)) {
+
+            let index = user.savedBlogList.indexOf(blog.id);
+            if (index > -1) {
+                user.savedBlogList.splice(index, 1);
+            }
+        } else {
+
+
+            user.savedBlogList.push(blog.id);
         }
-
+        
+        
         await user.save();
-
         return {
             status: 'success',
             message: "The blog has been saved!"

@@ -3,6 +3,7 @@ import { BlogService } from '../services/blog.service';
 import { Auth } from 'src/common/decorators/Auth.decorator';
 import { User } from 'src/common/decorators/User.decorator';
 import { JwtPayload } from '../../auth/types/jwtpayload.type';
+import mongoose, { ObjectId } from 'mongoose';
 
 @Controller({
     path:'blogs',
@@ -22,7 +23,7 @@ export class BlogController {
     @HttpCode(HttpStatus.OK)
     @Auth()
     @Get('/saved/:blogId')
-    async SavedBlog(@Param('blogId') blogId:string,@User() user:JwtPayload){
+    async SavedBlog(@Param('blogId') blogId:mongoose.Types.ObjectId,@User() user:JwtPayload){
         return await this.blogService.savedBlog(user.id,blogId);
     }
 }

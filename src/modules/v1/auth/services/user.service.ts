@@ -17,6 +17,9 @@ export class UserService {
         if (!isMongoId(userId))
             throw new BadRequestException('The user Id is not true');
         const user = await this.userModel.findById(userId);
+    
+        
+        
         if (!user) throw new NotFoundException('The user not found!');
         return user;
     }

@@ -37,6 +37,7 @@ export class AuthController {
     return await this.authService.SignUp(userDTO);
   }
 
+
   @HttpCode(HttpStatus.OK)
   @Post('local/signIn')
   async LoginUser(@Body() userDTO: LoginDTO) {
@@ -45,7 +46,8 @@ export class AuthController {
   @HttpCode(HttpStatus.OK)
   @Auth()
   @Get('/profile')
-  ProfileUser(@User() user: JwtPayload) {
+  ProfileUser(@User() user:JwtPayload) {
+    
     return user;
   }
   @HttpCode(HttpStatus.OK)

@@ -1,8 +1,9 @@
-import { Document } from "mongoose";
+import mongoose, { Document, ObjectId } from "mongoose";
 import { User } from "./user.interface";
 
 export interface Blog extends Document {
-    id: string;
+    id: mongoose.Types.ObjectId;
+    
     author: User
     category:string;
     title: string

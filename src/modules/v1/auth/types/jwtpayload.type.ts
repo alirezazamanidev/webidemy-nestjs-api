@@ -1,3 +1,6 @@
+import mongoose, { ObjectId } from "mongoose";
+import { Blog } from "src/common/interfaces/blog.interface";
+
 export type JwtPayload = {
   id: string;
   username: string;
@@ -5,7 +8,7 @@ export type JwtPayload = {
   phone: string;
   email: string;
   biography: string;
-  savedBlogList:string[]
+  savedBlogList:Blog[];
   avatar?: string;
   role: string;
   active: boolean;

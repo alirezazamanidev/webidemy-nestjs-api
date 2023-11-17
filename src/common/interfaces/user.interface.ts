@@ -1,4 +1,5 @@
-import { Document } from 'mongoose';
+import mongoose, { Document, ObjectId } from 'mongoose';
+import { Blog } from './blog.interface';
 
 export class User extends Document {
   id: string;
@@ -9,7 +10,8 @@ export class User extends Document {
   active: boolean;
   isAdmin: boolean;
   avatar: string;
-  savedBlogList:string[]
+  savedBlogList:Blog[]
+  checkBookmarkedBlog:(blogId:mongoose.Types.ObjectId)=>boolean
   role: string;
   biography: string;
   email: string;
