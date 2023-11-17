@@ -24,43 +24,35 @@ export class BlogService {
     }
 
     async savedBlog(userId: string, blogId: mongoose.Types.ObjectId) {
-
-
         const user = await this.userModel.findById(userId);
-        const blog = await this.BlogModel.findById(blogId);
-        if (!user) throw new NotFoundException("The user not founded");
 
+        if (user.checkBookmarkedBlog(blogId)) {
 
-
-        if (user.checkBookmarkedBlog(blog.id)) {
-
-            let index = user.savedBlogList.indexOf(blog.id);
-            if (index > -1) {
-                user.savedBlogList.splice(index, 1);
-            }
+            await user.updateOne({ $pull: { savedBlogList: blogId } });
         } else {
+            await user.updateOne({ $push: { savedBlogList: blogId } });
 
-
-            user.savedBlogList.push(blog.id);
         }
-        
-        
-        await user.save();
+
         return {
             status: 'success',
-            message: "The blog has been saved!"
+            message: "The blog has been bookmarked!"
         }
     }
 
-    async updateLiked(userID:string,blogId:string){
-        const blog=await this.BlogModel.findById(blogId);
+    async updateLiked(userID: string, blogId: string) {
+        const blog = await this.BlogModel.findById(blogId);
 
-        if(blog.likedUserList.includes(userID)){
-            await blog.updateOne({$pull:{likedUserList:userID}})
+        if (blog.likedUserList.includes(userID)) {
+            await blog.updateOne({ $pull: { likedUserList: userID } })
         }
-        else{
-            await blog.updateOne({$push:{likedUserList:userID}})
+        else {
+            await blog.updateOne({ $push: { likedUserList: userID } })
 
+        }
+
+        return {
+            status: 'success'
         }
 
     }
