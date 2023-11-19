@@ -17,6 +17,7 @@ export class createCommentDTO {
   user: string;
   course: string;
   episode: string;
+  blog:string
   comment: string;
 }
 export class AnswerCommentDTO {
@@ -24,6 +25,7 @@ export class AnswerCommentDTO {
   subject:{
     episode?:string;
     course?:string;
+    blog?:string
 
   }
   comment: string;
@@ -33,6 +35,7 @@ export class CommentDTO {
   subject: {
     course?: string;
     episode?: string;
+    blog?:string;
   };
   page: number;
   limit: number;

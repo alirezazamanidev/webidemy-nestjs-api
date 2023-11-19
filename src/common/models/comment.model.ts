@@ -7,6 +7,8 @@ const commentSchema = new Schema(
     parent: { type: Schema.Types.ObjectId, ref: 'Comment', default: null },
     approved: { type: Boolean, default: false },
     course: { type: Schema.Types.ObjectId, ref: 'Course', default: undefined },
+    blog: { type: Schema.Types.ObjectId, ref: 'Blog', default: undefined },
+
     episode: {
       type: Schema.Types.ObjectId,
       ref: 'Episode',

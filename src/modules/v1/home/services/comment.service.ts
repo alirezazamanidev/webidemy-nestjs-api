@@ -9,6 +9,7 @@ export class CommentService {
     constructor(@InjectModel('Comment') private commentModel: PaginateModel<Comment>) { }
 
     async store(commentDTO: createCommentDTO) {
+    
         const newComment = new this.commentModel({
             user: commentDTO.user,
             comment: commentDTO.comment,
@@ -25,7 +26,8 @@ export class CommentService {
 
     async getComments(commentDTO: CommentDTO) {
         const { subject, page, limit } = commentDTO;
-
+    
+        
         const comments = await this.commentModel.paginate(
             { ...subject, parent: null, approved: true },
             {
@@ -50,6 +52,7 @@ export class CommentService {
                 ],
             },
         );
+        
         return {
             data: comments.docs,
             page: comments.page,
