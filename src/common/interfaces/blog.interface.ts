@@ -21,6 +21,7 @@ export interface Blog extends Document {
     likedUserList:string[];
     likeCount: number;
     viewCount: number;
+    bookMarkedCount:number;
     commentCount: number;
 
 }

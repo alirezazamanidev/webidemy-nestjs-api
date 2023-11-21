@@ -35,12 +35,14 @@ export class BlogService {
 
     async savedBlog(userId: string, blogId: mongoose.Types.ObjectId) {
         const user = await this.userModel.findById(userId);
-
+        const blog=await this.BlogModel.findById(blogId);
         if (user.checkBookmarkedBlog(blogId)) {
 
             await user.updateOne({ $pull: { savedBlogList: blogId } });
+            await blog.updateOne({$inc:{bookMarkedCount:-1}});
         } else {
             await user.updateOne({ $push: { savedBlogList: blogId } });
+            await blog.updateOne({$inc:{bookMarkedCount:1}});
 
         }
 
