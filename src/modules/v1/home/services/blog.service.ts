@@ -54,10 +54,10 @@ export class BlogService {
         const blog = await this.BlogModel.findById(blogId);
 
         if (blog.likedUserList.includes(userID)) {
-            await blog.updateOne({ $pull: { likedUserList: userID } })
+            await blog.updateOne({ $pull: { likedUserList: userID },$inc:{likeCount:-1} })
         }
         else {
-            await blog.updateOne({ $push: { likedUserList: userID } })
+            await blog.updateOne({ $push: { likedUserList: userID },$inc:{likeCount:1} })
 
         }
 
