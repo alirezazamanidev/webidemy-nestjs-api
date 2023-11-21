@@ -24,9 +24,9 @@ export class CommentService {
 
     async index(BasePaginateDTO: BasePaginateDTO, user: JwtPayload) {
         const { page, item_count } = BasePaginateDTO;
-
+        
         const comments = await this.commentModel.paginate(
-            {},
+            {parent:null},
             {
                 page,
                 limit: item_count,
@@ -35,6 +35,24 @@ export class CommentService {
                     {
                         path: 'user',
                         select: ['fullname', 'username', 'avatar'],
+                    },
+                    {
+                        path:'comments',
+                        populate:[{
+                            path:'user',
+                            select:['fullname','username','avatar']
+                        },{
+                            path:'blog',
+                            select:['title']
+                        },
+                        {
+                            path:'course',
+                            select:['title','slug']
+                        },{
+                            path:'episode',
+                            select:['title','slug']
+                        }
+                    ]
                     },
                     {
                         path: 'course',
