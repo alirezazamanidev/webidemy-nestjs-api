@@ -16,7 +16,7 @@ export class CommentService {
         if (!isMongoId(commentId))
             throw new BadRequestException('The Comment Id Is not true!');
 
-        const comment = await this.commentModelV2.findById(commentId).populate('belongTo').exec();
+        const comment = await this.commentModelV2.findById(commentId).populate('comments').populate('belongTo').exec();
         
         if (!comment) throw new NotFoundException('The comment not found');
         return comment;
@@ -109,7 +109,7 @@ export class CommentService {
 
         await newComment.save();
         await parentComment.updateOne({ $set: { approved: true } });
-        await parentComment.belongTo.inc('commentCount');
+        await parentComment.belongTo.inc('commentCount',2);
         return {
             status: 'success',
         };
@@ -118,7 +118,24 @@ export class CommentService {
 
     async destroy(commentId: string) {
         const comment = await this.findById(commentId);
-        comment.deleteOne();
+        let removedCount = comment.comments.length;
+
+        
+        if(comment.comments.length > 0){
+       
+            Object.values(comment.comments).forEach(async comment => {
+                let subCmnt = await this.commentModelV2.findById(comment._id);
+                if(comment) await subCmnt.deleteOne();
+            });
+             
+        }
+
+         //Decrease commentCount
+         let totalRemoved = removedCount+1
+         await comment.belongTo.inc('commentCount', -2* (totalRemoved));
+
+         // Delete Comment
+         await comment.deleteOne();
         return {
             status: 'success',
         };
