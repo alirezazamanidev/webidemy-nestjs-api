@@ -28,11 +28,18 @@ const blogSchema = new Schema(
 blogSchema.plugin(mongoosePaginate);
 
 blogSchema.methods.inc = async function (filed: string, num: number = 1) {
+  
   this[filed] += num;
+
+  await this.save();
 };
 blogSchema.virtual('comments', {
   ref: 'Comment',
   localField: '_id',
   foreignField: 'course',
 });
+
+
+
+
 export { blogSchema };

@@ -20,6 +20,8 @@ const episodeSchema = new Schema(
 episodeSchema.plugin(mongoosePaginate);
 episodeSchema.methods.inc = async function (filed: string, num: number = 1) {
   this[filed] += num;
+  await this.save();
+
 };
 // episodeSchema.methods.download = function (user: User) {
 //   if (!user) return '#';

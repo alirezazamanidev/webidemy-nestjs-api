@@ -35,6 +35,8 @@ courseSchema.virtual('seasons', {
 });
 courseSchema.methods.inc = async function (filed: string, num: number = 1) {
   this[filed] += num;
+  await this.save();
+
 };
 courseSchema.virtual('comments', {
   ref: 'Comment',

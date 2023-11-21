@@ -10,6 +10,7 @@ export interface Blog extends Document {
     description: string
     isPublished: boolean
     slug: string
+    inc:(fild:string,num?:number)=>void
     studyTime: string
     photos: {}
     tags: string;

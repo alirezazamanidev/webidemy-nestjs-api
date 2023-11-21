@@ -1,7 +1,8 @@
 import mongoose from 'mongoose';
+import { Document } from 'mongoose';
 import * as mongoosePaginate from 'mongoose-paginate';
 const Schema = mongoose.Schema;
-const commentSchema = new Schema(
+export const commentSchema = new Schema(
   {
     user: { type: Schema.Types.ObjectId, ref: 'User' },
     parent: { type: Schema.Types.ObjectId, ref: 'Comment', default: null },
@@ -26,14 +27,25 @@ commentSchema.virtual('comments', {
   localField: '_id',
   foreignField: 'parent',
 });
-const commentbelong = (doc) => {
-  if (doc.course) return 'Course';
-  else if (doc.episode) return 'Episode';
-};
+
+const commentBlong = (doc: any) => {
+  
+  if (doc.course){
+    return 'Course';
+  }
+  else if (doc.episode){
+  
+    return 'Episode';
+  }
+  else if (doc.blog){
+
+    return 'Blog'
+  }
+}
 commentSchema.virtual('belongTo', {
-  ref: commentbelong,
-  localField: (doc) => commentbelong(doc).toLowerCase(),
-  foreignField: '_id',
-  justOne: true,
-});
-export { commentSchema };
+  ref:(doc:any)=>commentBlong(doc),
+  localField:(doc:any)=>commentBlong(doc).toLowerCase(),
+  foreignField:'_id',
+  justOne:true
+})
+

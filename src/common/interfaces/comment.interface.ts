@@ -12,7 +12,7 @@ export interface Comment extends Document {
   episode?: Episode;
   course?: Course;
   blog?:Blog;
-  belongTo: Course | Episode;
+  belongTo?:any
   comment: string;
   comments: Comment[];
   createdAt: Date;

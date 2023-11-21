@@ -26,7 +26,6 @@ export class AnswerCommentDTO {
     episode?:string;
     course?:string;
     blog?:string
-
   }
   comment: string;
   parent: string;
