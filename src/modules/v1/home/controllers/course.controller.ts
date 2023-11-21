@@ -27,7 +27,7 @@ export class CourseController {
   }
   @HttpCode(HttpStatus.OK)
   @Get('filter')
-  async FilterCurse(@Query() query:FilterQueryDTO) {
+  async FilterCuorse(@Query() query:FilterQueryDTO) {
     return await this.courseService.findbyFilter(query);
   }
   @HttpCode(HttpStatus.OK)

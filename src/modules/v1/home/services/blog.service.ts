@@ -2,12 +2,15 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import mongoose, { Model, ObjectId, PaginateModel } from 'mongoose';
 import { Blog } from 'src/common/interfaces/blog.interface';
+import { Category } from 'src/common/interfaces/category.interface';
 import { User } from 'src/common/interfaces/user.interface';
+import { FilterQueryDTO } from '../dtos/home.dto';
 
 @Injectable()
 export class BlogService {
 
-    constructor(@InjectModel('Blog') private BlogModel: PaginateModel<Blog>, @InjectModel('User') private userModel: Model<User>) { }
+    constructor(@InjectModel('Blog') private BlogModel: PaginateModel<Blog>, @InjectModel('User') private userModel: Model<User>,@InjectModel('Category') private categoryModel:Model<Category>
+    ){ }
 
 
     async index(): Promise<Blog[]> {
@@ -67,5 +70,53 @@ export class BlogService {
             status: 'success'
         }
 
+    }
+
+    async FindByFilter(filterDTO:FilterQueryDTO){
+    
+        
+        const query = {};
+        const { limit, page, search, sort, category } = filterDTO;
+
+        if (search) {
+            query['title'] = new RegExp(search, 'gi');
+        }
+
+
+        const perPage = parseInt(limit) || 8;
+        const currentPage = parseInt(page) || 1;
+        const skip = (currentPage - 1) * perPage;
+        if (category && category !== 'all') {
+            const cate = await this.categoryModel.findOne({ title: category });
+            if (cate) query['category'] = cate;
+        }
+
+
+        const blog = this.BlogModel.find({ ...query });
+
+
+        if (sort === 'newest') {
+            blog.sort({ createdAt: -1 });
+        }
+
+        const blogList = await blog
+            .skip(skip)
+            .limit(perPage)
+            .populate([{
+                path: 'author',
+                select: ['fullname', 'avatar'],
+            },{
+                path:'category',
+                select:['title']
+            }])
+            .exec();
+
+
+        return {
+            data: blogList,
+
+            page: page,
+            pages: skip,
+        };
     }
 }
