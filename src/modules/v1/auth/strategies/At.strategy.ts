@@ -11,7 +11,10 @@ export class AccessTokenStrategy extends PassportStrategy(Strategy) {
         (request: Request) => {
           let token = null;
           if (request && request.cookies) {
-            token = request.cookies['x-access-token'];
+           
+              token = request.cookies['x-access-token'];
+
+
           }
           return token;
         },
@@ -22,7 +25,7 @@ export class AccessTokenStrategy extends PassportStrategy(Strategy) {
   }
 
   async validate(payload: JwtPayload) {
-    
+
     return payload;
   }
 }

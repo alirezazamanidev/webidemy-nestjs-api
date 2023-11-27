@@ -5,6 +5,6 @@ export function getMongoURL() {
   const connection =
     NODE_ENV == NodeEnviorment.DEV
       ? `mongodb://${MONGO_HOST}:${MONGO_PORT}/${MONGO_DATABSE}`
-      : 'mongodb://webidemy:webidemy8080@127.0.0.1:27017/webidemy_db?directConnection=true&serverSelectionTimeoutMS=2000&authSource=admin';
+      : 'mongodb://alireza:zamani2020@127.0.0.1:27017/webidemy_db?directConnection=true&serverSelectionTimeoutMS=2000&authSource=admin';
   return connection;
 }
