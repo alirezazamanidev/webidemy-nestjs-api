@@ -8,7 +8,7 @@ import { Course } from 'src/common/interfaces/course.intreface';
 import { BasePaginateDTO } from 'src/common/dtos/base-paginate.dto';
 import { JwtPayload } from '../../auth/types/jwtpayload.type';
 import isMongoId from 'validator/lib/isMongoId';
-
+import * as fs from 'fs';
 @Injectable()
 export class SeasonService {
     constructor(@InjectModel('Season') private seasonModel: PaginateModel<SeasonCourse>, @InjectModel('Course') private courseModel: Model<Course>) { }
@@ -36,13 +36,14 @@ export class SeasonService {
 
         
         
-        let seasonList=sessons.docs.map(season=>{
-            
-            
+        let seasonList=sessons.docs.filter(season=>{
+          
+             
            return season.course.teacher.toString() ===user.id && season; 
         })
 
-
+        
+        
         return {
             data: seasonList,
             limit: sessons.limit,
@@ -85,10 +86,10 @@ export class SeasonService {
         if (!season) throw new BadRequestException(Messages.SEASON_NOT_EXIST);
     
         // delete video episodes
-        // season.episodes.forEach((episode) => {
-        //   fs.unlinkSync(`./public${episode?.videoUrl}`);
-        // });
-        // season.episodes.forEach((episode) => episode.deleteOne());
+        season.episodes.forEach((episode) => {
+          fs.unlinkSync(`./public${episode?.videoUrl}`);
+        });
+        season.episodes.forEach((episode) => episode.deleteOne());
     
         //delete seasson
         season.deleteOne();

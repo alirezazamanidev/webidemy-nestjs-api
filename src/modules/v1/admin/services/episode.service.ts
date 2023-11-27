@@ -85,7 +85,7 @@ export class EpisodeService {
             },
         );
 
-        let episodeList = episodes.docs.map(episode => {
+        let episodeList = episodes.docs.filter(episode => {
             return episode.season.course.teacher.toString() === user.id && episode;
         })
         return {

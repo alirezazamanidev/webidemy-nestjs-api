@@ -10,23 +10,23 @@ import { AnswerCommentDTO } from '../../home/dtos/home.dto';
 @Injectable()
 export class CommentService {
 
-    constructor(@InjectModel('Comment') private commentModel: PaginateModel<Comment>,@InjectModel('Comment') private commentModelV2: Model<Comment>) { }
+    constructor(@InjectModel('Comment') private commentModel: PaginateModel<Comment>, @InjectModel('Comment') private commentModelV2: Model<Comment>) { }
 
     async findById(commentId: string) {
         if (!isMongoId(commentId))
             throw new BadRequestException('The Comment Id Is not true!');
 
         const comment = await this.commentModelV2.findById(commentId).populate('comments').populate('belongTo').exec();
-        
+
         if (!comment) throw new NotFoundException('The comment not found');
         return comment;
     }
 
     async index(BasePaginateDTO: BasePaginateDTO, user: JwtPayload) {
         const { page, item_count } = BasePaginateDTO;
-        
+
         const comments = await this.commentModel.paginate(
-            {parent:null},
+            { parent: null },
             {
                 page,
                 limit: item_count,
@@ -37,22 +37,22 @@ export class CommentService {
                         select: ['fullname', 'username', 'avatar'],
                     },
                     {
-                        path:'comments',
-                        populate:[{
-                            path:'user',
-                            select:['fullname','username','avatar']
-                        },{
-                            path:'blog',
-                            select:['title']
+                        path: 'comments',
+                        populate: [{
+                            path: 'user',
+                            select: ['fullname', 'username', 'avatar']
+                        }, {
+                            path: 'blog',
+                            select: ['title']
                         },
                         {
-                            path:'course',
-                            select:['title','slug']
-                        },{
-                            path:'episode',
-                            select:['title','slug']
+                            path: 'course',
+                            select: ['title', 'slug']
+                        }, {
+                            path: 'episode',
+                            select: ['title', 'slug']
                         }
-                    ]
+                        ]
                     },
                     {
                         path: 'course',
@@ -83,6 +83,7 @@ export class CommentService {
 
         let CheckCommentType = (comment: Comment) => {
 
+
             if (comment?.course) {
 
                 return comment.course.teacher;
@@ -103,10 +104,10 @@ export class CommentService {
 
 
 
-        let commentList = comments.docs.map(comment => {
-
-            return CheckCommentType(comment).toString() === user.id && comment;
+        let commentList = comments.docs.filter(comment => {
+            return CheckCommentType(comment).toString() ===user.id && comment;
         })
+    
 
         return {
             data: commentList,
@@ -127,7 +128,7 @@ export class CommentService {
 
         await newComment.save();
         await parentComment.updateOne({ $set: { approved: true } });
-        await parentComment.belongTo.inc('commentCount',2);
+        await parentComment.belongTo.inc('commentCount', 2);
         return {
             status: 'success',
         };
@@ -138,22 +139,22 @@ export class CommentService {
         const comment = await this.findById(commentId);
         let removedCount = comment.comments.length;
 
-        
-        if(comment.comments.length > 0){
-       
+
+        if (comment.comments.length > 0) {
+
             Object.values(comment.comments).forEach(async comment => {
                 let subCmnt = await this.commentModelV2.findById(comment._id);
-                if(comment) await subCmnt.deleteOne();
+                if (comment) await subCmnt.deleteOne();
             });
-             
+
         }
 
-         //Decrease commentCount
-         let totalRemoved = removedCount+1
-         await comment.belongTo.inc('commentCount', -2* (totalRemoved));
+        //Decrease commentCount
+        let totalRemoved = removedCount + 1
+        await comment.belongTo.inc('commentCount', -2 * (totalRemoved));
 
-         // Delete Comment
-         await comment.deleteOne();
+        // Delete Comment
+        await comment.deleteOne();
         return {
             status: 'success',
         };

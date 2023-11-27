@@ -26,28 +26,35 @@ export class AuthService {
   ) {}
   async SignUp(userDTO: RegisterDTO) {
     const user = await this.userService.create(userDTO);
+
+
     if (user?.active)
       throw new BadRequestException(Messages.ALREADY_FOR_ACTIVE_USER);
-    const activeCodeList = await this.ActiveCodeService.findActiveCodeForUser(user.id);
-    if (activeCodeList.length !== 0) {
-      throw new HttpException(Messages.NOT_EXPIRE_CODE, 203);
-    }
-    const newActiveCode =
-      await this.ActiveCodeService.createActivarionCode(user);
 
-    // Send Sms for phone user
-    console.log({
-      phone: newActiveCode.phone,
-      code: newActiveCode.code,
-    });
+    const tokens = await this.createTokens(user);
+    await this.userService.updateHashRt(user.id, tokens.refresh_token);
+    await user.updateOne({$set:{active:true}});
+    return tokens;
+    // const activeCodeList = await this.ActiveCodeService.findActiveCodeForUser(user.id);
+    // if (activeCodeList.length !== 0) {
+    //   throw new HttpException(Messages.NOT_EXPIRE_CODE, 203);
+    // }
+    // const newActiveCode =
+    //   await this.ActiveCodeService.createActivarionCode(user);
 
-    return {
-      message: Messages.SEND_SMS,
-      status: 'success',
-      data: {
-        verifyPhoneToken: newActiveCode.id,
-      },
-    };
+    // // Send Sms for phone user
+    // console.log({
+    //   phone: newActiveCode.phone,
+    //   code: newActiveCode.code,
+    // });
+
+    // return {
+    //   message: Messages.SEND_SMS,
+    //   status: 'success',
+    //   data: {
+    //     verifyPhoneToken: newActiveCode.id,
+    //   },
+    // };
   }
 
   async SignIn(userDTO: LoginDTO) {
@@ -55,26 +62,31 @@ export class AuthService {
     if (!user) throw new BadRequestException(Messages.PHONE_NOT_EXIST);
     if (user?.active)
       throw new BadRequestException(Messages.ALREADY_FOR_ACTIVE_USER);
-    const activeCodeList = await this.ActiveCodeService.findActiveCodeForUser(user.id);
-    if (activeCodeList.length !== 0) {
-      throw new HttpException(Messages.NOT_EXPIRE_CODE, 203);
-    }
-    const newActiveCode =
-      await this.ActiveCodeService.createActivarionCode(user);
 
-    // Send Sms for phone user
-    console.log({
-      phone: newActiveCode.phone,
-      code: newActiveCode.code,
-    });
+      const tokens = await this.createTokens(user);
+      await this.userService.updateHashRt(user.id, tokens.refresh_token);
+      await user.updateOne({$set:{active:true}});
+      return tokens;
+    // const activeCodeList = await this.ActiveCodeService.findActiveCodeForUser(user.id);
+    // if (activeCodeList.length !== 0) {
+    //   throw new HttpException(Messages.NOT_EXPIRE_CODE, 203);
+    // }
+    // const newActiveCode =
+    //   await this.ActiveCodeService.createActivarionCode(user);
 
-    return {
-      message: Messages.SEND_SMS,
-      status: 'success',
-      data: {
-        verifyPhoneToken: newActiveCode.id,
-      },
-    };
+    // // Send Sms for phone user
+    // console.log({
+    //   phone: newActiveCode.phone,
+    //   code: newActiveCode.code,
+    // });
+
+    // return {
+    //   message: Messages.SEND_SMS,
+    //   status: 'success',
+    //   data: {
+    //     verifyPhoneToken: newActiveCode.id,
+    //   },
+    // };
   }
 
   async createTokens(user: User): Promise<Tokens> {

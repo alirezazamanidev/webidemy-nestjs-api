@@ -30,7 +30,11 @@ export class BlogService {
         const blog=await this.BlogModel.findOne({slug:blogSlug})
         .populate([{
             path:'author',
-            select:['fullname','avatar','biography']
+            select:['fullname','avatar','biography'],
+
+        },{
+            path:'category',
+            select:['title']
         }]).exec();
 
         return blog;
@@ -92,11 +96,14 @@ export class BlogService {
         }
 
 
-        const blog = this.BlogModel.find({ ...query });
+        const blog = this.BlogModel.find({ ...query,isPublished:true });
 
 
         if (sort === 'newest') {
             blog.sort({ createdAt: -1 });
+        }
+        if(sort==='popular'){
+            blog.sort({likeCount:-1});
         }
 
         const blogList = await blog
