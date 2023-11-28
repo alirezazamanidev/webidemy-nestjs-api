@@ -27,10 +27,6 @@ export class AuthService {
   async SignUp(userDTO: RegisterDTO) {
     const user = await this.userService.create(userDTO);
 
-
-    if (user?.active)
-      throw new BadRequestException(Messages.ALREADY_FOR_ACTIVE_USER);
-
     const tokens = await this.createTokens(user);
     await this.userService.updateHashRt(user.id, tokens.refresh_token);
     await user.updateOne({$set:{active:true}});
@@ -60,9 +56,7 @@ export class AuthService {
   async SignIn(userDTO: LoginDTO) {
     const user = await this.userService.findOneByPhone(userDTO?.phone);
     if (!user) throw new BadRequestException(Messages.PHONE_NOT_EXIST);
-    if (user?.active)
-      throw new BadRequestException(Messages.ALREADY_FOR_ACTIVE_USER);
-
+    
       const tokens = await this.createTokens(user);
       await this.userService.updateHashRt(user.id, tokens.refresh_token);
       await user.updateOne({$set:{active:true}});
