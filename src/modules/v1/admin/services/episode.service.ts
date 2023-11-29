@@ -25,6 +25,8 @@ export class EpisodeService {
         @InjectModel('Course') private courseModel: PaginateModel<Course>,
     ) { }
 
+  
+
     async create(user: JwtPayload) {
         const seasons = await this.seasonModel.find({}).populate({
             path: 'course',
