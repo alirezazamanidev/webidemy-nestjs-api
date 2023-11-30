@@ -14,7 +14,7 @@ async function bootstrap() {
   });
 
   app.use(cookieParser());
-  app.useGlobalFilters(...getGlobalFilters(httpAdapter));
+  // app.useGlobalFilters(...getGlobalFilters(httpAdapter));
   app.useStaticAssets('public');
 
   app.setGlobalPrefix('/api');
