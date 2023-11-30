@@ -2,6 +2,7 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { PaginateModel } from 'mongoose';
 import { Episode } from 'src/common/interfaces/episode.interface';
+
 @Injectable()
 export class EpisodeService {
 
