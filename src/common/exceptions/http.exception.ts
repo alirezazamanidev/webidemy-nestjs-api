@@ -7,8 +7,6 @@ import {
   InternalServerErrorException,
 } from '@nestjs/common';
 import { HttpAdapterHost } from '@nestjs/core';
-
-import { Request } from 'express';
 @Catch()
 export class HttpExceptionsFilter implements ExceptionFilter {
   constructor(private readonly httpAdapterHost: HttpAdapterHost) {}
@@ -22,6 +20,7 @@ export class HttpExceptionsFilter implements ExceptionFilter {
     } else {
       httpStatus = HttpStatus.INTERNAL_SERVER_ERROR;
       message = new InternalServerErrorException().message;
+      
     }
     const responseBody = {
       statusCode: httpStatus,
@@ -32,7 +31,8 @@ export class HttpExceptionsFilter implements ExceptionFilter {
         invalidParams: [],
       },
     };
-
+    
+    
     httpAdapter.reply(ctx.getResponse(), responseBody, httpStatus);
   }
 }
