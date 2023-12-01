@@ -5,7 +5,7 @@ export function getMongoURL() {
   const connection =
     NODE_ENV == NodeEnviorment.DEV
       ? `mongodb://${MONGO_HOST}:${MONGO_PORT}/${MONGO_DATABSE}`
-      : 'mongodb://zamani2020@127.0.0.1:27017/webidemydb?directConnection=true&serverSelectionTimeoutMS=2000&authSource=admin';
+      : 'mongodb://pachim:zamani2020@127.0.0.1:27017/webidemydb?directConnection=true&serverSelectionTimeoutMS=2000&authSource=admin';
 
       
   return connection;
